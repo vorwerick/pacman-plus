@@ -8,4 +8,11 @@ class PlayerInputComponent : Component() {
     var horizontal : Boolean = false
     var vertical : Boolean = false
     var lastDirBeforeBoth = 0
+
+    var useBomb = false
+
+
+    override fun toString(): String {
+        return "USE BOMB: $useBomb | INPUT_DIR: $dir "
+    }
 }

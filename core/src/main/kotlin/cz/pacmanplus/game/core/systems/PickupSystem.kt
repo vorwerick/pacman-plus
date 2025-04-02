@@ -28,7 +28,7 @@ class PickupSystem :
             CircleCollisionComponent::class.java
         )
     ) {
-    val log = LoggerFactory.getLogger("MovementSystem")
+    val log = LoggerFactory.getLogger("MovementPhysicsSystem")
 
 
     override fun process(e: Entity?) {

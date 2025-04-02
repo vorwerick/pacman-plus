@@ -6,8 +6,6 @@ import com.badlogic.gdx.math.Vector2
 class MovementComponent : Component() {
 
     var lastDir: Vector2 = Vector2.Zero
-    var newDir: Vector2 = Vector2.Zero
-    var direction: Float = 0f
     var targetXTile: Int = 0
     var targetYTile: Int = 0
     var xTile: Int = 0
@@ -15,6 +13,6 @@ class MovementComponent : Component() {
     var maxSpeed: Float = 10f
 
     override fun toString(): String {
-        return "MovementComponent"
+        return "LAST DIR: $lastDir | CURRENT X: $targetXTile, Y: $targetYTile | TARGET X: $targetXTile, Y: $targetYTile"
     }
 }

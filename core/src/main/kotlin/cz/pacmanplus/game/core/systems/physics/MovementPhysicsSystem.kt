@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.GameState
+import cz.pacmanplus.game.core.components.attributes.TriggerableComponent
 import cz.pacmanplus.game.core.components.control.ForcePushingComponent
 import cz.pacmanplus.game.core.components.control.PlayerInputComponent
 import cz.pacmanplus.game.core.components.physics.*
@@ -18,14 +19,14 @@ import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
-class MovementSystem :
+class MovementPhysicsSystem :
     EntityProcessingSystem(
         Aspect.all(
             MovementComponent::class.java,
             PositionComponent::class.java,
         ).one(RectangleCollisionComponent::class.java, CircleCollisionComponent::class.java)
     ) {
-    val log = LoggerFactory.getLogger("MovementSystem")
+    val log = LoggerFactory.getLogger("MovementPhysicsSystem")
 
 
     override fun process(e: Entity?) {
@@ -42,6 +43,7 @@ class MovementSystem :
             val movementComponent = entity.getComponent(MovementComponent::class.java)
             val inputComponent = entity.getComponent(PlayerInputComponent::class.java)
             val forcePushingComponent = entity.getComponent(ForcePushingComponent::class.java)
+            val pushComponent = entity.getComponent(PushComponent::class.java)
 
             val circleCollisionComponent = entity.getComponent(CircleCollisionComponent::class.java)
             if (circleCollisionComponent != null) {
@@ -73,6 +75,14 @@ class MovementSystem :
                 val targetY = movementComponent.yTile * 32
 
                 val effect = getAreaEffectsOnPoint(areaEffects, positionComponent.x, positionComponent.y)
+                if(effect != null){
+                    println("CUCUC")
+                   val ex =  world.getEntity(effect.entityId)
+                   val triggerable = ex.getComponent(TriggerableComponent::class.java)
+                    if(triggerable != null){
+                        triggerable.triggered = true
+                    }
+                }
 
                 val effectForce = Vector2.Zero
 
@@ -136,12 +146,23 @@ class MovementSystem :
                     if (collider.isPushable) {
 
                         val en = world.getEntity(collider.entityId)
-                        val pc = en.getComponent(PushableComponent::class.java)
-                        pc.pushPotential += delta * 20f
-                        pc.pushDirection = Vector2.Zero
-                        pc.pushDirection.x = possibleDir.x.toFloat()
-                        pc.pushDirection.y = possibleDir.y.toFloat()
+                        val pushableComponent = world.getEntity(collider.entityId).getComponent(PushableComponent::class.java)
+                        if(pushComponent != null){
+                            pushComponent.pushAmount += delta * pushComponent.pushForce
+                            pushComponent.pushAmount = pushComponent.pushAmount.coerceAtMost(100f);
+                            if(pushComponent.pushAmount >= 30f){
+                                pushComponent.pushAmount = 0f
+
+                                pushableComponent.pushDirection = Vector2(inputComponent.dir.x,inputComponent.dir.y)
+                                println(pushableComponent.pushDirection)
+                                //positionComponent.x += (pushableComponent.pushDirection.x) * 32
+                                //positionComponent.y += (pushableComponent.pushDirection.y) * 32
+                            }
+                        }
                     }
+                } else {
+                    pushComponent.pushAmount -= delta * 100f
+                    pushComponent.pushAmount = pushComponent.pushAmount.coerceAtLeast(0f);
                 }
 
 
@@ -169,7 +190,7 @@ class MovementSystem :
 
                 val tDir = testTwo.cpy().nor()
 
-                val speed = if (possibleDir.x != 0 || possibleDir.y != 0) 100 else 0
+                val speed = if (possibleDir.x != 0 || possibleDir.y != 0) 140 else 0
 
                 val moveVector = Vector2(tDir.x, tDir.y).scl(speed * delta)
 
@@ -197,17 +218,11 @@ class MovementSystem :
 
                 val isPushable = pushableComponent != null
                 if (isPushable) {
-
-                    if (pushableComponent.pushDirection == Vector2.Zero) {
-                        pushableComponent.pushPotential -= Gdx.graphics.deltaTime * 10f
-                        if (pushableComponent.pushPotential < 0f) {
-                            pushableComponent.pushPotential = 0f
-                        }
-                        if (pushableComponent.pushPotential >= 32f) {
-                            pushableComponent.pushPotential = 0f
-                            positionComponent.x += (pushableComponent.pushDirection.x) * 32
-                            positionComponent.y += (pushableComponent.pushDirection.y) * 32
-                        }
+                    if (pushableComponent.pushDirection != Vector2.Zero) {
+                        println("TAK CO JE")
+                        positionComponent.x += (pushableComponent.pushDirection.x) * 32
+                        positionComponent.y += (pushableComponent.pushDirection.y) * 32
+                       pushableComponent.pushDirection = Vector2.Zero
                     }
 
                     // println(pushableComponent.pushPotential)

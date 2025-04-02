@@ -1,4 +1,4 @@
-package cz.pacmanplus
+package cz.pacmanplus.screens
 
 import com.artemis.World
 import com.badlogic.gdx.Gdx
@@ -13,17 +13,16 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import cz.pacmanplus.di.gameContext
 import cz.pacmanplus.game.PlayerCamera
-import cz.pacmanplus.game.core.entity.LevelFactory
 import ktx.app.KtxScreen
-import org.koin.core.context.GlobalContext.startKoin
+import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
 
-class GameScreen : KtxScreen {
+class MenuScreen : KtxScreen {
 
-    val log = LoggerFactory.getLogger("GameScreen")
+    val log = LoggerFactory.getLogger("MenuScreen")
     lateinit var skin: Skin
     lateinit var fps: Label
 
@@ -31,24 +30,18 @@ class GameScreen : KtxScreen {
 
 
     init {
-        startKoin {
-            modules(gameContext)
-        }
 
-        LevelFactory.createLevelDebug()
 
 
 
         log.debug("Screen initialized")
 
-        VisUI.load()
         skin = VisUI.getSkin()
-        fps = Label("Click me", skin)
+        fps = Label("Intro screen", skin)
 
         val button = TextButton("Click me", skin)
 
         fps.y += 32
-        Gdx.input.inputProcessor = stage
         button.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 println("Tlačítko bylo stisknuto!")
@@ -65,8 +58,6 @@ class GameScreen : KtxScreen {
 
 
     override fun render(delta: Float) {
-        val world = getKoin().get<World>()
-        world.process()
 
         fps.setText("${Gdx.graphics.framesPerSecond}")
 
@@ -75,8 +66,6 @@ class GameScreen : KtxScreen {
     }
 
     override fun dispose() {
-        getKoin().get<World>().dispose()
-        unloadKoinModules(gameContext)
         stage.dispose()
     }
 

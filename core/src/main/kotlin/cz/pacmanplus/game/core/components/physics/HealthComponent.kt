@@ -2,6 +2,8 @@ package cz.pacmanplus.game.core.components.physics
 
 import com.artemis.Component
 
+
+
 class HealthComponent : Component() {
     var lives = 0
     var bleeding = false

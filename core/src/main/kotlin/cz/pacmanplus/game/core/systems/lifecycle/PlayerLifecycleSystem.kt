@@ -1,4 +1,4 @@
-package cz.pacmanplus.game.core.systems
+package cz.pacmanplus.game.core.systems.lifecycle
 
 import com.artemis.Aspect
 import com.artemis.Entity
@@ -13,7 +13,7 @@ import cz.pacmanplus.game.core.components.physics.*
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
-class DamageSystem :
+class PlayerLifecycleSystem :
     EntityProcessingSystem(
         Aspect.all(
             PositionComponent::class.java,
@@ -21,7 +21,7 @@ class DamageSystem :
             HealthComponent::class.java,
         )
     ) {
-    val log = LoggerFactory.getLogger("MovementSystem")
+    val log = LoggerFactory.getLogger("MovementPhysicsSystem")
 
 
     override fun process(e: Entity?) {

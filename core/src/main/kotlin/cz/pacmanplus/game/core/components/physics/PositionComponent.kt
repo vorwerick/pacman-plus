@@ -7,6 +7,6 @@ class PositionComponent : Component() {
     var y = 0f
 
     override fun toString(): String {
-        return "x=$x, y=$y"
+        return "POSITION x=$x, y=$y"
     }
 }

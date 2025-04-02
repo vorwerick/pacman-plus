@@ -46,7 +46,7 @@ class PhysicsCircleRenderingSystem(val configuration: RenderingSystemConfigurati
         }
         configuration.shapeRenderer.circle(positionComponent.x, positionComponent.y, circleCollisionComponent.radius)
 
-        configuration.shapeRenderer.color = Color.CYAN
+        //configuration.shapeRenderer.color = Color.CYAN
         movementComponent?.let {
             configuration.shapeRenderer.line(
                 positionComponent.x,
