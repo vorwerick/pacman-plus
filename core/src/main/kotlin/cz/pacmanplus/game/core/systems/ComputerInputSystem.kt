@@ -8,14 +8,16 @@ import com.artemis.systems.EntityProcessingSystem
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
+import cz.pacmanplus.game.core.components.control.ComputerComponent
 import cz.pacmanplus.game.core.components.control.InputComponent
 import cz.pacmanplus.game.core.components.control.PlayerComponent
 
-//find human player component with input component
-class PlayerInputSystem : EntityProcessingSystem(Aspect.all(InputComponent::class.java, PlayerComponent::class.java)) {
-    override fun process(player: Entity?) {
-        player?.let {
-            val inputComponent = player.getComponent(InputComponent::class.java)
+//find computer component with input component
+class ComputerInputSystem :
+    EntityProcessingSystem(Aspect.all(InputComponent::class.java, ComputerComponent::class.java)) {
+    override fun process(computer: Entity?) {
+        computer?.let {
+            val inputComponent = computer.getComponent(InputComponent::class.java)
 
             val moveRight =
                 if (Gdx.input.isKeyPressed(Input.Keys.RIGHT) || Gdx.input.isKeyPressed(Input.Keys.D)) 1 else 0

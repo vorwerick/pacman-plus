@@ -1,4 +1,4 @@
-package cz.pacmanplus.game.core.systems.physics
+package cz.pacmanplus.game.core.systems.physics.movement
 
 import com.artemis.Aspect
 import com.artemis.Entity
@@ -10,40 +10,35 @@ import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.GameState
-import cz.pacmanplus.game.core.components.attributes.TriggerableComponent
-import cz.pacmanplus.game.core.components.control.ForcePushingComponent
-import cz.pacmanplus.game.core.components.control.PlayerInputComponent
+import cz.pacmanplus.game.core.components.attributes.ButtonComponent
+import cz.pacmanplus.game.core.components.attributes.InventoryComponent
+import cz.pacmanplus.game.core.components.control.InputComponent
 import cz.pacmanplus.game.core.components.physics.*
 import cz.pacmanplus.utils.Coords
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
 
-class MovementPhysicsSystem :
+class MovementSystem :
     EntityProcessingSystem(
         Aspect.all(
+            InputComponent::class.java,
             MovementComponent::class.java,
             PositionComponent::class.java,
-        ).one(RectangleCollisionComponent::class.java, CircleCollisionComponent::class.java)
+            CircleCollisionComponent::class.java
+        )
     ) {
-    val log = LoggerFactory.getLogger("MovementPhysicsSystem")
+    val log = LoggerFactory.getLogger("MovementSystem")
 
 
     override fun process(e: Entity?) {
-
-        val gameState: GameState = getKoin().get()
-        if (gameState.paused) {
-            return
-        }
 
         val friction = 1f
         e?.let { entity: Entity ->
             val delta = Gdx.graphics.deltaTime
             val positionComponent = entity.getComponent(PositionComponent::class.java)
             val movementComponent = entity.getComponent(MovementComponent::class.java)
-            val inputComponent = entity.getComponent(PlayerInputComponent::class.java)
-            val forcePushingComponent = entity.getComponent(ForcePushingComponent::class.java)
-            val pushComponent = entity.getComponent(PushComponent::class.java)
+            val inputComponent = entity.getComponent(InputComponent::class.java)
 
             val circleCollisionComponent = entity.getComponent(CircleCollisionComponent::class.java)
             if (circleCollisionComponent != null) {
@@ -64,7 +59,7 @@ class MovementPhysicsSystem :
                     Aspect.all(
                         RectangleCollisionComponent::class.java,
                         PositionComponent::class.java,
-                        ForcePushingComponent::class.java
+                        //ForcePushingComponent::class.java
                     )
                 )
 
@@ -75,11 +70,10 @@ class MovementPhysicsSystem :
                 val targetY = movementComponent.yTile * 32
 
                 val effect = getAreaEffectsOnPoint(areaEffects, positionComponent.x, positionComponent.y)
-                if(effect != null){
-                    println("CUCUC")
-                   val ex =  world.getEntity(effect.entityId)
-                   val triggerable = ex.getComponent(TriggerableComponent::class.java)
-                    if(triggerable != null){
+                if (effect != null) {
+                    val ex = world.getEntity(effect.entityId)
+                    val triggerable = ex.getComponent(ButtonComponent::class.java)
+                    if (triggerable != null) {
                         triggerable.triggered = true
                     }
                 }
@@ -88,7 +82,7 @@ class MovementPhysicsSystem :
 
                 if (effect != null) {
                     if (effect is AreaEffect.PushForceEffect) {
-                        val ef =  (effect as AreaEffect.PushForceEffect)
+                        val ef = (effect as AreaEffect.PushForceEffect)
                         effectForce.x = ef.x * ef.mass
                         effectForce.y = ef.y * ef.mass
                     }
@@ -141,30 +135,40 @@ class MovementPhysicsSystem :
                         possibleDir.y = 0
                     }
                 }
-
-                if (collider != null) {
-                    if (collider.isPushable) {
-
+                entity.getComponent(PassiveAbilitiesComponent::class.java)?.let { passiveAbilities ->
+                    if (collider != null) {
                         val en = world.getEntity(collider.entityId)
-                        val pushableComponent = world.getEntity(collider.entityId).getComponent(PushableComponent::class.java)
-                        if(pushComponent != null){
-                            pushComponent.pushAmount += delta * pushComponent.pushForce
-                            pushComponent.pushAmount = pushComponent.pushAmount.coerceAtMost(100f);
-                            if(pushComponent.pushAmount >= 30f){
-                                pushComponent.pushAmount = 0f
+                        val pushableComponent =
+                            world.getEntity(collider.entityId).getComponent(PushableComponent::class.java)
 
-                                pushableComponent.pushDirection = Vector2(inputComponent.dir.x,inputComponent.dir.y)
+
+                        if (collider.isPushable) {
+                            passiveAbilities.pushForce += delta * 30
+                            passiveAbilities.pushForce = passiveAbilities.pushForce.coerceAtMost(100f);
+                            if (passiveAbilities.pushForce >= 30f) {
+                                passiveAbilities.pushForce = 0f
+                                pushableComponent.pushDirection = Vector2(inputComponent.dir.x, inputComponent.dir.y)
                                 println(pushableComponent.pushDirection)
-                                //positionComponent.x += (pushableComponent.pushDirection.x) * 32
-                                //positionComponent.y += (pushableComponent.pushDirection.y) * 32
                             }
                         }
-                    }
-                } else {
-                    pushComponent.pushAmount -= delta * 100f
-                    pushComponent.pushAmount = pushComponent.pushAmount.coerceAtLeast(0f);
-                }
 
+                        if (collider.isUnlockable) {
+                            passiveAbilities.unlockingValue += delta * 30
+                            passiveAbilities.unlockingValue = passiveAbilities.unlockingValue.coerceAtMost(100f);
+                            if (passiveAbilities.unlockingValue >= 20f) {
+                                passiveAbilities.unlockingValue = 0f
+                                val un = world.getEntity(collider.entityId)
+                                un.getComponent(UnlockableComponent::class.java).availableKeys = entity.getComponent(InventoryComponent::class.java).keyring
+                            }
+                        }
+
+
+                    } else {
+                        passiveAbilities.unlockingValue -= delta * 100f
+                        passiveAbilities.unlockingValue = passiveAbilities.unlockingValue.coerceAtLeast(0f);
+                    }
+
+                }
 
 
                 newY = movementComponent.yTile + (possibleDir.y)
@@ -209,25 +213,6 @@ class MovementPhysicsSystem :
                 }
 
 
-            }
-
-            val rectCollisionComponent = entity.getComponent(RectangleCollisionComponent::class.java)
-
-            if (rectCollisionComponent != null) {
-                val pushableComponent = entity.getComponent(PushableComponent::class.java)
-
-                val isPushable = pushableComponent != null
-                if (isPushable) {
-                    if (pushableComponent.pushDirection != Vector2.Zero) {
-                        println("TAK CO JE")
-                        positionComponent.x += (pushableComponent.pushDirection.x) * 32
-                        positionComponent.y += (pushableComponent.pushDirection.y) * 32
-                       pushableComponent.pushDirection = Vector2.Zero
-                    }
-
-                    // println(pushableComponent.pushPotential)
-                    //pushableComponent.pushPotential.coerceAtLeast(0f)
-                }
             }
 
 
@@ -311,6 +296,7 @@ class MovementPhysicsSystem :
                     entityId = id,
                     rect,
                     rectangleEntity.getComponent(PushableComponent::class.java) != null,
+                    rectangleEntity.getComponent(UnlockableComponent::class.java) != null,
                     rpComponent.x,
                     rpComponent.y
                 )
@@ -345,6 +331,7 @@ class Collider(
     val entityId: Int,
     val rectangle: Rectangle,
     val isPushable: Boolean,
+    val isUnlockable: Boolean,
     val x: Float = 0f,
     val y: Float = 0f
 ) {

@@ -5,11 +5,11 @@ import com.badlogic.gdx.math.Vector2
 interface FloorObjects {
 
     fun floor(x: Float, y: Float) // base floor
-    fun switch(x: Float, y: Float, affectedIds: List<Int>) // switchable button
-    fun trigger(x: Float, y: Float, affectedIds: List<Int>) // one-way button
+    fun switch(x: Float, y: Float, group: Int) // switchable button
+    fun trigger(x: Float, y: Float, group: Int) // one-way button
     fun enemySpawner(x: Float, y: Float) // enemy spawner
     fun enemyGate(x: Float, y: Float) // enemy portal
-    fun teleport(x: Float, y: Float, targetId: Int) // teleport from A to B
+    fun teleport(x: Float, y: Float, addressId: Int, targetId: Int) // teleport from A to B
     fun lava(x: Float, y: Float) // persistent damage area
     fun explosion(x: Float, y: Float) // short-term damage area
     fun trapdoor(x: Float, y: Float) // switchable damage area

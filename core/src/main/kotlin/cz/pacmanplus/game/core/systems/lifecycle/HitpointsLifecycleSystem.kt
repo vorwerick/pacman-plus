@@ -19,11 +19,6 @@ class HitpointsLifecycleSystem :
 
     override fun process(e: Entity?) {
 
-        val gameState = getKoin().get<GameState>()
-        if (gameState.paused) {
-            return
-        }
-
         e?.let { entity: Entity ->
             val hitPointsComponent = entity.getComponent(HitPointsComponent::class.java)
 

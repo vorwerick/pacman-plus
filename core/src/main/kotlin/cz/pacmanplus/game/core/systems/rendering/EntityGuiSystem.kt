@@ -2,19 +2,14 @@ package cz.pacmanplus.game.core.systems.rendering
 
 import com.artemis.Aspect
 import com.artemis.BaseSystem
-import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.graphics.Color
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.kotcrab.vis.ui.VisUI
-import cz.pacmanplus.game.PlayerCamera
-import cz.pacmanplus.game.core.components.control.PlayerInputComponent
 import cz.pacmanplus.game.core.components.physics.*
-import cz.pacmanplus.game.core.components.pickup.PickupComponent
+import cz.pacmanplus.game.core.components.attributes.InventoryComponent
 import cz.pacmanplus.game.core.systems.findPlayer
+import cz.pacmanplus.game.core.systems.physics.collisions.findPickupItems
 import org.koin.java.KoinJavaComponent.getKoin
 
 class EntityGuiSystem() : BaseSystem() {
@@ -22,6 +17,7 @@ class EntityGuiSystem() : BaseSystem() {
     private val skin = VisUI.getSkin()
     val entitiesState = Label("", skin)
     val entityInfo = Label("", skin)
+    val entityInventory = Label("", skin)
 
     var frameTime = 0f
 
@@ -35,9 +31,11 @@ class EntityGuiSystem() : BaseSystem() {
 
         stage.addActor(entitiesState)
         stage.addActor(entityInfo)
+        stage.addActor(entityInventory)
 
         entitiesState.y += 128
         entityInfo.y += 96
+        entityInventory.y += 128+32
 
 
     }
@@ -52,8 +50,16 @@ class EntityGuiSystem() : BaseSystem() {
         entityInfo.setText("FRAME_TIME: ${(frameTime*1000).toInt()}ms | ENTITY_COUNT: ${entities.entities.size()}/${entities.entities.capacity}")
 
         val walls = world.aspectSubscriptionManager.get(Aspect.all(RectangleCollisionComponent::class.java))
-        val pickups = world.aspectSubscriptionManager.get(Aspect.all(PickupComponent::class.java))
-        entitiesState.setText("WALLS_&_BOXES: ${walls.entities.size()} | COLLECTABLES: ${pickups.entities.size()}")
+        val pickups = world.findPickupItems()
+        entitiesState.setText("WALLS_&_BOXES: ${walls.entities.size()} | COLLECTABLES: ${pickups.size()}")
+
+        val player = world.findPlayer()
+        player?.let { p ->
+            p.getComponent(InventoryComponent::class.java)?.let { inventory ->
+                entitiesState.setText("SCORE: ${inventory.score} | SLOT: ${inventory.slot} | KEYS: ${inventory.keyring.joinToString(" ")}")
+
+            }
+        }
 
 
         stage.act()

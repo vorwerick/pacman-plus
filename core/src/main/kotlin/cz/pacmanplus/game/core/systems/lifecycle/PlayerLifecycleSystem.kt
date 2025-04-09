@@ -21,15 +21,10 @@ class PlayerLifecycleSystem :
             HealthComponent::class.java,
         )
     ) {
-    val log = LoggerFactory.getLogger("MovementPhysicsSystem")
+    val log = LoggerFactory.getLogger("MovementSystem")
 
 
     override fun process(e: Entity?) {
-
-        val gameState = getKoin().get<GameState>()
-        if (gameState.paused) {
-            return
-        }
 
         e?.let { entity: Entity ->
             val positionComponent = entity.getComponent(PositionComponent::class.java)

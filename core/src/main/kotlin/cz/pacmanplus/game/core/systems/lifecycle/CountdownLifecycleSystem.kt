@@ -21,15 +21,16 @@ class CountdownLifecycleSystem :
 
     override fun process(e: Entity?) {
 
-        val gameState: GameState = getKoin().get()
-        if (gameState.paused) {
-            return
-        }
 
         e?.let { entity: Entity ->
             val delta = Gdx.graphics.deltaTime
-            entity.getComponent(DelayComponent::class.java)?.tick(delta)
-            entity.getComponent(LifespanComponent::class.java)?.spent()
+            entity.getComponent(LifespanComponent::class.java)?.let { lifespan ->
+                lifespan.spent()
+                if(lifespan.isFinished()){
+                    world.delete(entity.id)
+                }
+            }
+
 
         }
     }

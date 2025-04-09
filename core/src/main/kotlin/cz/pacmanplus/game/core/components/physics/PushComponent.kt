@@ -2,11 +2,11 @@ package cz.pacmanplus.game.core.components.physics
 
 import com.artemis.Component
 
-class PushComponent  : Component() {
-    var pushAmount: Float = 0f
+class PassiveAbilitiesComponent  : Component() {
     var pushForce: Float = 0f
+    var unlockingValue: Float = 0f
 
     override fun toString(): String {
-        return "amount=$pushAmount"
+        return "pushForce=$pushForce | unlockingValue=$unlockingValue"
     }
 }

@@ -37,10 +37,11 @@ dependencies {
   api "org.jetbrains.kotlin:kotlin-stdlib:$kotlinVersion"
   api "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlinxCoroutinesVersion"
   implementation "io.insert-koin:koin-core:3.5.0" // Core verze Koinu
- implementation "io.insert-koin:koin-logger-slf4j:3.5.0" // Logger (volitelné)
+ //implementation "io.insert-koin:koin-logger-slf4j:3.5.0" // Logger (volitelné)
 
-  implementation("org.slf4j:slf4j-api:2.0.9") // SLF4J API
-  implementation("ch.qos.logback:logback-classic:1.4.14")
+  //implementation("org.slf4j:slf4j-api:2.0.17") // SLF4J API
+  implementation("ch.qos.logback:logback-classic:1.5.18")
+  implementation("ch.qos.logback:logback-core:1.5.18")
 
   if (enableGraalNative == 'true') {
     implementation "io.github.berstanio:gdx-svmhelper-annotations:$graalHelperVersion"

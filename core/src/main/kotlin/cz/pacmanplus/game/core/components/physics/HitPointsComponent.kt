@@ -2,6 +2,7 @@ package cz.pacmanplus.game.core.components.physics
 
 import com.artemis.Component
 
+//todo refactor
 sealed class HitPoint {
     data object None : HitPoint()
     data object Dead : HitPoint()

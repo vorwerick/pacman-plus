@@ -2,7 +2,7 @@ package cz.pacmanplus.game.core.entity.creator
 
 import cz.pacmanplus.game.core.components.physics.CircleCollisionComponent
 import cz.pacmanplus.game.core.components.physics.PositionComponent
-import cz.pacmanplus.game.core.components.pickup.PickupComponent
+import cz.pacmanplus.game.core.components.pickup.ScoreComponent
 import cz.pacmanplus.game.core.entity.ItemObjects
 import cz.pacmanplus.game.core.entity.newEntity
 import org.slf4j.LoggerFactory
@@ -17,11 +17,27 @@ class ItemObjectsCreator : ItemObjects {
 
 
     override fun life(x: Float, y: Float) {
-        TODO("Not yet implemented")
+        newEntity("Life").apply {
+            create(PositionComponent::class.java).apply {
+                this.x = x
+                this.y = y
+            }
+            create(ScoreComponent::class.java).apply {
+                amount = 10
+            }
+        }
     }
 
     override fun shield(x: Float, y: Float) {
-        TODO("Not yet implemented")
+        newEntity("Shield").apply {
+            create(PositionComponent::class.java).apply {
+                this.x = x
+                this.y = y
+            }
+            create(ScoreComponent::class.java).apply {
+                amount = 10
+            }
+        }
     }
 
     override fun score(x: Float, y: Float) {
@@ -30,11 +46,8 @@ class ItemObjectsCreator : ItemObjects {
                 this.x = x
                 this.y = y
             }
-            create(CircleCollisionComponent::class.java).apply {
-                radius = 2f
-            }
-            create(PickupComponent::class.java).apply {
-
+            create(ScoreComponent::class.java).apply {
+                amount = 10
             }
         }
     }

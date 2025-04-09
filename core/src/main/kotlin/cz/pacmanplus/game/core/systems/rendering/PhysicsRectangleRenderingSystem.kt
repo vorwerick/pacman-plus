@@ -7,7 +7,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import cz.pacmanplus.game.PlayerCamera
 import cz.pacmanplus.game.core.components.attributes.ActivateComponent
 import cz.pacmanplus.game.core.components.attributes.LifespanComponent
-import cz.pacmanplus.game.core.components.attributes.TriggerableComponent
+import cz.pacmanplus.game.core.components.attributes.SwitchableComponent
+import cz.pacmanplus.game.core.components.attributes.ButtonComponent
 import cz.pacmanplus.game.core.components.physics.*
 import org.koin.java.KoinJavaComponent.getKoin
 
@@ -34,7 +35,8 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
         val activateComponent = world.getEntity(entityId).getComponent(ActivateComponent::class.java)
         val rectangleCollisionComponent =
             world.getEntity(entityId).getComponent(RectangleCollisionComponent::class.java)
-        val triggerableComponent = world.getEntity(entityId).getComponent(TriggerableComponent::class.java)
+        val buttonComponent = world.getEntity(entityId).getComponent(ButtonComponent::class.java)
+        val switchableComponent = world.getEntity(entityId).getComponent(SwitchableComponent::class.java)
 
         configuration.shapeRenderer.setAutoShapeType(true)
         configuration.shapeRenderer.begin(ShapeType.Filled)
@@ -62,16 +64,18 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
             } else {
                 configuration.shapeRenderer.color = Color.BROWN
             }
-            if(triggerableComponent != null) {
-                if(triggerableComponent.triggered){
+            if(buttonComponent != null) {
+                if(buttonComponent.triggered){
                     configuration.shapeRenderer.color = Color.GREEN
                 } else {
                     configuration.shapeRenderer.color = Color.WHITE
                 }
             }
-            if(activateComponent != null) {
-                if(activateComponent.activated){
-                    configuration.shapeRenderer.color = Color.WHITE
+            if(switchableComponent != null) {
+                if(switchableComponent.enabled){
+                    configuration.shapeRenderer.color = Color.BLUE
+                } else {
+                    configuration.shapeRenderer.color = Color.RED
                 }
             }
 
