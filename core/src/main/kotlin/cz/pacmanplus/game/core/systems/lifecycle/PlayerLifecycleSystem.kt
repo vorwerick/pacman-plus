@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Rectangle
 import cz.pacmanplus.GameConfig
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.physics.*
+import cz.pacmanplus.utils.delete
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -32,7 +33,7 @@ class PlayerLifecycleSystem :
             val circleCollisionComponent = entity.getComponent(CircleCollisionComponent::class.java)
 
             if(healthComponent.lives < 0){
-                world.deleteEntity(entity)
+                delete(entity.id, "Player live is below 0")
             }
 
             healthComponent.bleeding = false

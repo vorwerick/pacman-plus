@@ -72,7 +72,7 @@ class PhysicsGuiSystem() : BaseSystem() {
                 }
 
             }
-            map.setText(sb.toString())
+           // map.setText(sb.toString())
         }
 
 

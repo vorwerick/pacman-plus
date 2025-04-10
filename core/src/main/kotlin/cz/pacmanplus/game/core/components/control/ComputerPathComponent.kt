@@ -2,8 +2,9 @@ package cz.pacmanplus.game.core.components.control
 
 import com.artemis.Component
 
-class ComputerComponent : Component() {
+class ComputerPathComponent : Component() {
 
+    var path: MutableList<Pair<Int, Int>>? = null
 
 
     override fun toString(): String {

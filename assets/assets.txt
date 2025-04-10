@@ -1,4 +1,17 @@
+characters/character_solo_x2.png
+characters/foes_solo_x2.png
+egypt/Ground.png
+egypt/Walls_Overlap.png
 logo.png
+temp/bomb.png
+temp/box.png
+temp/chest.png
+temp/door.png
+temp/enemy.png
+temp/explosion.png
+temp/portal.png
+temp/stone.png
+temp/wall.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt

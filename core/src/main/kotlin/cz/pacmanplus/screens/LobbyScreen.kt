@@ -19,7 +19,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
 
-class GameScreen : KtxScreen {
+class LobbyScreen : KtxScreen {
 
     val log = LoggerFactory.getLogger("GameScreen")
 
@@ -31,7 +31,7 @@ class GameScreen : KtxScreen {
         loadKoinModules(gameContext)
 
         val levelCreator: LevelCreator = getKoin().get()
-        levelCreator.createLevelEmpty(32, 32)
+        levelCreator.createLobbyLevel(8, 8, 64f, 64f)
 
         log.debug("Screen initialized")
     }

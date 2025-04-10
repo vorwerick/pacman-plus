@@ -1,10 +1,15 @@
 package cz.pacmanplus.game.core.entity
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import cz.pacmanplus.game.core.components.attributes.InventoryComponent
 import cz.pacmanplus.game.core.components.attributes.PressureComponent
-import cz.pacmanplus.game.core.components.control.ComputerComponent
+import cz.pacmanplus.game.core.components.control.CharacterComponent
+import cz.pacmanplus.game.core.components.control.ComputerPathComponent
 import cz.pacmanplus.game.core.components.control.PlayerComponent
 import cz.pacmanplus.game.core.components.control.InputComponent
+import cz.pacmanplus.game.core.components.control.computer.FindPlayerComponent
+import cz.pacmanplus.game.core.components.graphics.TexturesComponent
 import cz.pacmanplus.game.core.components.physics.*
 import org.slf4j.LoggerFactory
 
@@ -14,6 +19,7 @@ class CharacterCreator {
 
     fun player(x: Float, y: Float) {
         newEntity("Player").apply {
+            create(CharacterComponent::class.java)
             create(PlayerComponent::class.java)
             create(InputComponent::class.java)
             create(PositionComponent::class.java).apply {
@@ -50,9 +56,10 @@ class CharacterCreator {
 
     fun enemyPatrol(x: Float, y: Float) {
         newEntity("Enemy patrol").apply {
-
-            create(ComputerComponent::class.java)
-            create(InputComponent::class.java)
+            create(CharacterComponent::class.java)
+            create(ComputerPathComponent::class.java)
+            create(FindPlayerComponent::class.java)
+           // create(InputComponent::class.java)
             create(PositionComponent::class.java).apply {
                 val currentXTile = ((x + 16) / 32).toInt()
                 val currentYTile = ((y + 16) / 32).toInt()
@@ -60,7 +67,7 @@ class CharacterCreator {
                 this.y = currentYTile * 32f
             }
             create(HealthComponent::class.java).apply {
-                lives = 3
+                lives = 1
                 bleeding = false
                 invulnerability = true
             }
@@ -72,6 +79,11 @@ class CharacterCreator {
             }
             create(PressureComponent::class.java).apply {
 
+            }
+            create(TexturesComponent::class.java).apply {
+                val texture = Texture("temp/enemy.png")
+                val frames = TextureRegion.split(texture, 32, 32)
+                textures = frames.flatten()
             }
         }
     }

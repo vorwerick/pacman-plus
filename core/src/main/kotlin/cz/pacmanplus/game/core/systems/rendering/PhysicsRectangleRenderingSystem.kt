@@ -39,7 +39,7 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
         val switchableComponent = world.getEntity(entityId).getComponent(SwitchableComponent::class.java)
 
         configuration.shapeRenderer.setAutoShapeType(true)
-        configuration.shapeRenderer.begin(ShapeType.Filled)
+        configuration.shapeRenderer.begin(ShapeType.Line)
         if (rectangleCollisionComponent.solid) {
             val isInvulnerable = hitPointsComponent.state == HitPoint.Invulnerable
             val isPushable = pushableComponent != null
@@ -91,6 +91,7 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
             rectangleCollisionComponent.height
         )
         configuration.shapeRenderer.end()
+
 
 
     }

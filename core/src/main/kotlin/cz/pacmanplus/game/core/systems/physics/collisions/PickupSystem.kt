@@ -14,6 +14,7 @@ import cz.pacmanplus.game.core.components.pickup.KeyComponent
 import cz.pacmanplus.game.core.components.attributes.InventoryComponent
 import cz.pacmanplus.game.core.components.pickup.ScoreComponent
 import cz.pacmanplus.game.core.components.pickup.SlotItemComponent
+import cz.pacmanplus.utils.delete
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -43,7 +44,7 @@ class PickupSystem :
                 if (circle.contains(position.x, position.y)) {
                     val destroy = consumeForDestroy(itemEntity, entity)
                     if (destroy) {
-                        world.delete(id)
+                        delete(id, "Item was picked up")
                     }
                 }
 

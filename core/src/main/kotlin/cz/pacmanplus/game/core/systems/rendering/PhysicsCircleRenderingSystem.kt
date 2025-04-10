@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import cz.pacmanplus.game.PlayerCamera
+import cz.pacmanplus.game.core.components.control.ComputerPathComponent
 import cz.pacmanplus.game.core.components.physics.CircleCollisionComponent
 import cz.pacmanplus.game.core.components.physics.HealthComponent
 import cz.pacmanplus.game.core.components.physics.MovementComponent
@@ -28,6 +29,7 @@ class PhysicsCircleRenderingSystem(val configuration: RenderingSystemConfigurati
         val circleCollisionComponent = world.getEntity(entityId).getComponent(CircleCollisionComponent::class.java)
         val movementComponent = world.getEntity(entityId).getComponent(MovementComponent::class.java)
        val healthComponent = world.getEntity(entityId).getComponent(HealthComponent::class.java)
+        val computerPathComponent = world.getEntity(entityId).getComponent(ComputerPathComponent::class.java)
 
         configuration.shapeRenderer.setAutoShapeType(true)
         configuration.shapeRenderer.begin(ShapeType.Line)
@@ -44,9 +46,14 @@ class PhysicsCircleRenderingSystem(val configuration: RenderingSystemConfigurati
             }
 
         }
+        if(computerPathComponent != null){
+            configuration.shapeRenderer.color = Color.RED
+        }
         configuration.shapeRenderer.circle(positionComponent.x, positionComponent.y, circleCollisionComponent.radius)
 
         //configuration.shapeRenderer.color = Color.CYAN
+
+        /*
         movementComponent?.let {
             configuration.shapeRenderer.line(
                 positionComponent.x,
@@ -65,6 +72,8 @@ class PhysicsCircleRenderingSystem(val configuration: RenderingSystemConfigurati
 
 
         }
+
+         */
         configuration.shapeRenderer.end()
 
 

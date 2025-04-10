@@ -1,7 +1,10 @@
 package cz.pacmanplus.game.core.entity.creator
 
+import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.core.components.attributes.*
+import cz.pacmanplus.game.core.components.graphics.TexturesComponent
 import cz.pacmanplus.game.core.components.objects.FloorComponent
 import cz.pacmanplus.game.core.components.physics.*
 import cz.pacmanplus.game.core.entity.FloorObjects
@@ -113,6 +116,11 @@ class FloorObjectsCreator : FloorObjects {
                 address = addressId
                 target = targetId
             }
+            create(TexturesComponent::class.java).apply {
+                val texture = Texture("temp/portal.png")
+                val frames = TextureRegion.split(texture, 32, 32)
+                textures = frames.flatten()
+            }
         }
     }
 
@@ -144,6 +152,11 @@ class FloorObjectsCreator : FloorObjects {
             }
             create(LifespanComponent::class.java).apply {
                 frames = 30
+            }
+            create(TexturesComponent::class.java).apply {
+                val texture = Texture("temp/explosion.png")
+                val frames = TextureRegion.split(texture, 32, 32)
+                textures = frames.flatten()
             }
         }
     }

@@ -92,7 +92,9 @@ class LevelCreator {
 
 
                         } else {
-
+                            if(Random.nextInt() % 5 == 0) {
+                                wallCreator.wall(i * 32f + 16, j * 32f + 16, 3)
+                            }
                         }
                     }
                 }
@@ -102,6 +104,48 @@ class LevelCreator {
         }
         floorObjects.teleport(128f + 16, 96f + 16, 1, 2)
        // floorObjects.teleport(64+64f+64-16+256, 64f + 128f-16 + 32 ,  2, 1)
+
+        wallCreator.stone(64+64f+64-16+256, 64f + 128f-16 + 32 )
+
+        log.info("Map created")
+    }
+
+    fun createLobbyLevel(width: Int, height: Int, playerX: Float, playerY: Float) {
+        val wallCreator: WallObjects = getKoin().get()
+        val itemCreator: ItemObjects = getKoin().get()
+        val floorObjects: FloorObjects = getKoin().get()
+        val characterCreator: CharacterCreator = getKoin().get()
+
+        var last = false
+        (0 until width).forEach { i ->
+            (0 until height).forEach { j ->
+                if (i == 1 && j == 1) {
+                    floorObjects.start(64f, 64f)
+                    characterCreator.player(64f, 64f)
+                    characterCreator.enemyPatrol(328f-16, 328f-16)
+                } else if (i == 1 && j == 2) {
+
+                } else if (i == 2 && j == 1) {
+
+                } else {
+                    if (i == 0 || i == width - 1 || j == 0 || j == height - 1) {
+                        wallCreator.bedrock(i * 32f + 16, j * 32f + 16)
+                    } else {
+                        if (i % 2 == 0 && j % 2 == 0) {
+                            wallCreator.bedrock(i * 32f + 16, j * 32f + 16)
+
+
+                        } else {
+
+                        }
+                    }
+                }
+
+
+            }
+        }
+        floorObjects.teleport(128f + 16, 96f + 16, 1, 2)
+        // floorObjects.teleport(64+64f+64-16+256, 64f + 128f-16 + 32 ,  2, 1)
 
         wallCreator.stone(64+64f+64-16+256, 64f + 128f-16 + 32 )
 

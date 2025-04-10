@@ -83,4 +83,8 @@ class IterableGrid(val width: Int, val height: Int) {
         }
     }
 
+    fun getGrid(): Array<Array<Int?>> {
+        return grid
+    }
+
 }

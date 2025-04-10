@@ -15,6 +15,7 @@ import cz.pacmanplus.game.core.components.physics.*
 import cz.pacmanplus.game.core.components.pickup.ScoreComponent
 import cz.pacmanplus.game.core.components.pickup.SlotItemComponent
 import cz.pacmanplus.game.core.systems.lifecycle.HitpointsLifecycleSystem
+import cz.pacmanplus.utils.delete
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -46,7 +47,7 @@ class DamageSystem :
                     if (Intersector.overlaps(colliderCircle, areaCollider)) {
                         val destroy = dealDamageForDestroy(damageArea, entity)
                         if (destroy) {
-                            world.delete(id)
+                            delete(id, "Damage area overlaps the object")
                         }
                     }
                 }
@@ -57,7 +58,7 @@ class DamageSystem :
                     if (Intersector.overlaps(colliderRect, areaCollider)) {
                         val destroy = dealDamageForDestroy(damageArea, entity)
                         if (destroy) {
-                            world.delete(id)
+                            delete(id, "Damage area overlaps the object")
                         }
                     }
                 }

@@ -6,6 +6,7 @@ import com.artemis.systems.EntityProcessingSystem
 import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.core.components.physics.*
 import cz.pacmanplus.game.core.entity.ItemObjects
+import cz.pacmanplus.utils.delete
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -18,7 +19,7 @@ class UnlockingSystem :
             RectangleCollisionComponent::class.java,
         )
     ) {
-    val log = LoggerFactory.getLogger("MovementSystem")
+    val log = LoggerFactory.getLogger("UnlockingSystem")
 
 
     override fun process(e: Entity?) {
@@ -42,7 +43,7 @@ class UnlockingSystem :
                             }
 
                         }
-                        world.delete(entity.id)
+                        delete(entity.id, "Object was unlocked and destroyed")
                     } else {
                         //fail
                     }

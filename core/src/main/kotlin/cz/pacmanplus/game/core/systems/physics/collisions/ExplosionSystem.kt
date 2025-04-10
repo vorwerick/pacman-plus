@@ -9,9 +9,12 @@ import com.badlogic.gdx.Gdx
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.attributes.DelayComponent
 import cz.pacmanplus.game.core.components.attributes.ExplosionComponent
+import cz.pacmanplus.game.core.components.physics.HitPoint
+import cz.pacmanplus.game.core.components.physics.HitPointsComponent
 import cz.pacmanplus.game.core.components.physics.PositionComponent
 import cz.pacmanplus.game.core.components.physics.RectangleCollisionComponent
 import cz.pacmanplus.game.core.entity.FloorObjects
+import cz.pacmanplus.utils.delete
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -59,26 +62,31 @@ class ExplosionSystem :
 
                         destroyables.forEach { obstacle ->
                             val obstaclePos = obstacle.getComponent(PositionComponent::class.java)
-                            val obstacleTileX = ((obstaclePos.x / 32)+16).toInt()
-                            val obstacleTileY =( (obstaclePos.y / 32)+16).toInt()
+                            val obstacleTileX = (((obstaclePos.x + 16) / 32)).toInt()
+                            val obstacleTileY = (((obstaclePos.y + 16) / 32)).toInt()
 
-                            if(obstacleTileX == tileX && obstacleTileY == tileY){
+                            if (obstacleTileX == tileX && obstacleTileY == tileY) {
+                                obstacle.getComponent(HitPointsComponent::class.java)?.let {
+                                    if(it.state is HitPoint.Alive){
+                                        val state = (it.state as HitPoint.Alive)
+                                        state.value -= 1
+                                        it.state = state
+                                    }
+                                }
                                 isObstacle = true
                             }
                         }
 
 
-                        if(isObstacle){
+                        if (isObstacle) {
                             break
                         } else {
                             floorObjects.explosion(tileX * 32f, tileY * 32f)
                         }
                     }
                 }
+                delete(e.id, "Bomb disappears, explosion is created")
 
-
-
-                world.delete(e.id)
             }
 
         }

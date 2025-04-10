@@ -7,6 +7,7 @@ import com.badlogic.gdx.Gdx
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.attributes.DelayComponent
 import cz.pacmanplus.game.core.components.attributes.LifespanComponent
+import cz.pacmanplus.utils.delete
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -27,7 +28,7 @@ class CountdownLifecycleSystem :
             entity.getComponent(LifespanComponent::class.java)?.let { lifespan ->
                 lifespan.spent()
                 if(lifespan.isFinished()){
-                    world.delete(entity.id)
+                    delete(entity.id, "Object lifespan has ended up")
                 }
             }
 

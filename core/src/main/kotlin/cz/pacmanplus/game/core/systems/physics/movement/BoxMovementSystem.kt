@@ -2,7 +2,10 @@ package cz.pacmanplus.game.core.systems.physics.movement
 
 import com.artemis.Aspect
 import com.artemis.Entity
+import com.artemis.EntitySubscription
 import com.artemis.systems.EntityProcessingSystem
+import com.badlogic.gdx.math.Circle
+import com.badlogic.gdx.math.Rectangle
 import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.physics.*
@@ -36,8 +39,12 @@ class BoxMovementSystem :
                 if (isPushable) {
                     if (pushableComponent.pushDirection != Vector2.Zero) {
                         println("TAK CO JE")
-                        positionComponent.x += (pushableComponent.pushDirection.x) * 32
-                        positionComponent.y += (pushableComponent.pushDirection.y) * 32
+                        val newX = (pushableComponent.pushDirection.x) * 32
+                        val newY = (pushableComponent.pushDirection.y) * 32
+
+
+                        positionComponent.y += newY
+                        positionComponent.x += newX
                         pushableComponent.pushDirection = Vector2.Zero
                     }
 
@@ -49,6 +56,8 @@ class BoxMovementSystem :
 
         }
     }
+
+
 
 
 }
