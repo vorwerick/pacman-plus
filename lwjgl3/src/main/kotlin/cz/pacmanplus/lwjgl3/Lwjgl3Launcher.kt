@@ -13,7 +13,7 @@ fun main() {
       return
     Lwjgl3Application(ApplicationCore(), Lwjgl3ApplicationConfiguration().apply {
         setTitle("pacman-plus")
-        setWindowedMode(800, 600)
+        setWindowedMode(1000, 600)
         setWindowIcon(*(arrayOf(128, 64, 32, 16).map { "libgdx$it.png" }.toTypedArray()))
     })
 }

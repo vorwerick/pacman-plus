@@ -10,6 +10,7 @@ import cz.pacmanplus.di.accessories
 import cz.pacmanplus.di.screenFactory
 import cz.pacmanplus.screens.GameScreen
 import cz.pacmanplus.screens.IntroScreen
+import cz.pacmanplus.screens.LoadingScreen
 import cz.pacmanplus.screens.MenuScreen
 import ktx.app.KtxGame
 import ktx.app.KtxScreen
@@ -35,12 +36,9 @@ class RootUI : KtxGame<KtxScreen>() {
         KtxAsync.initiate()
 
 
-        addScreen(IntroScreen())
-        addScreen(MenuScreen())
-        addScreen(GameScreen())
-
         //setScreen<IntroScreen>()
-        setScreen<GameScreen>()
+        addScreen(LoadingScreen())
+        setScreen<LoadingScreen>()
         log.debug("Created and ready")
 
         skin = VisUI.getSkin()
@@ -88,5 +86,6 @@ inline fun <reified T : KtxScreen> T.showIntroScreen() {
 }
 
 inline fun <reified T : KtxScreen> T.showGameScreen() {
+    getKoin().get<RootUI>().addScreen(getKoin().get<GameScreen>())
     getKoin().get<RootUI>().setScreen(GameScreen::class.java)
 }

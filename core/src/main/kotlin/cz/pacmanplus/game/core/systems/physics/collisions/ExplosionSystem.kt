@@ -6,11 +6,10 @@ import com.artemis.EntitySubscription
 import com.artemis.World
 import com.artemis.systems.EntityProcessingSystem
 import com.badlogic.gdx.Gdx
-import cz.pacmanplus.game.GameState
-import cz.pacmanplus.game.core.components.attributes.DelayComponent
+import cz.pacmanplus.game.core.components.attributes.TimeComponent
 import cz.pacmanplus.game.core.components.attributes.ExplosionComponent
-import cz.pacmanplus.game.core.components.physics.HitPoint
-import cz.pacmanplus.game.core.components.physics.HitPointsComponent
+import cz.pacmanplus.game.core.components.physics.LifecycleState
+import cz.pacmanplus.game.core.components.physics.LifecycleComponent
 import cz.pacmanplus.game.core.components.physics.PositionComponent
 import cz.pacmanplus.game.core.components.physics.RectangleCollisionComponent
 import cz.pacmanplus.game.core.entity.FloorObjects
@@ -22,7 +21,7 @@ import org.slf4j.LoggerFactory
 class ExplosionSystem :
     EntityProcessingSystem(
         Aspect.all(
-            DelayComponent::class.java, PositionComponent::class.java, ExplosionComponent::class.java,
+            TimeComponent::class.java, PositionComponent::class.java, ExplosionComponent::class.java,
         )
     ) {
     val log = LoggerFactory.getLogger("BombSystem")
@@ -34,8 +33,8 @@ class ExplosionSystem :
 
         e.let { entity: Entity ->
             val delta = Gdx.graphics.deltaTime
-            val delayComponent = entity.getComponent(DelayComponent::class.java)
-            if (!delayComponent.isFinished()) {
+            val timeComponent = entity.getComponent(TimeComponent::class.java)
+            if (!timeComponent.isFinished()) {
                 return
             }
 
@@ -44,7 +43,7 @@ class ExplosionSystem :
                 world.aspectSubscriptionManager.get(Aspect.all(RectangleCollisionComponent::class.java)).entities(world)
             val floorObjects: FloorObjects = getKoin().get()
             val bombRadius = 3
-            if (delayComponent.isFinished()) {
+            if (timeComponent.isFinished()) {
                 val directions = listOf(
                     1 to 0,  // doprava
                     -1 to 0, // doleva
@@ -55,8 +54,8 @@ class ExplosionSystem :
                 for ((dx, dy) in directions) {
                     var isObstacle = false
                     for (i in 1..bombRadius) {
-                        val tileX = ((positionComponent.x / 32)).toInt() + (i * dx)
-                        val tileY = ((positionComponent.y / 32)).toInt() + (i * dy)
+                        val tileX = (((positionComponent.x+16) / 32)).toInt() + (i * dx)
+                        val tileY = (((positionComponent.y+16) / 32)).toInt() + (i * dy)
 
 
 
@@ -66,13 +65,7 @@ class ExplosionSystem :
                             val obstacleTileY = (((obstaclePos.y + 16) / 32)).toInt()
 
                             if (obstacleTileX == tileX && obstacleTileY == tileY) {
-                                obstacle.getComponent(HitPointsComponent::class.java)?.let {
-                                    if(it.state is HitPoint.Alive){
-                                        val state = (it.state as HitPoint.Alive)
-                                        state.value -= 1
-                                        it.state = state
-                                    }
-                                }
+                                obstacle.getComponent(LifecycleComponent::class.java)?.decreaseHitpoints()
                                 isObstacle = true
                             }
                         }

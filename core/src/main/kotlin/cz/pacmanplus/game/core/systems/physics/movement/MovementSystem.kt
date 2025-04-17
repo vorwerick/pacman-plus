@@ -18,7 +18,9 @@ import cz.pacmanplus.utils.Coords
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 import kotlin.math.abs
+import kotlin.math.sign
 
+//TODO refactor, split input system and movement system - movement for all MovementComponent entities
 class MovementSystem :
     EntityProcessingSystem(
         Aspect.all(
@@ -114,7 +116,7 @@ class MovementSystem :
                 if ((abs(diffToCurrentTile.x) <= 2)) {
                     if (colliderHorizontal != null) {
                         if (inputComponent.vertical && (colliderVertical == null)) {
-                            //  possibleDir.y = ((diffToCurrentTile.y).sign.toInt() * -1)
+                            //  possibleDir.y = ((diffToCurrentTile.y).sign.toInt() * -1)  causes wall trough move and stucking!!
                         } else {
                             possibleDir.y = 0
                             collider = colliderHorizontal
@@ -127,7 +129,7 @@ class MovementSystem :
                 if ((abs(diffToCurrentTile.y) <= 2)) {
                     if (colliderVertical != null) {
                         if (inputComponent.horizontal && (colliderHorizontal == null)) {
-                            // possibleDir.x = ((diffToCurrentTile.x).sign.toInt() * -1)
+                           //  possibleDir.x = ((diffToCurrentTile.x).sign.toInt() * -1)  causes wall trough move and stucking!!
                         } else {
                             possibleDir.x = 0
                             collider = colliderVertical

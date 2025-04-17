@@ -1,5 +1,6 @@
 package cz.pacmanplus.game.core.entity
 
+import com.badlogic.gdx.math.Vector2
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
@@ -88,12 +89,17 @@ class LevelCreator {
                         wallCreator.bedrock(i * 32f + 16, j * 32f + 16)
                     } else {
                         if (i % 2 == 0 && j % 2 == 0) {
-                            wallCreator.bedrock(i * 32f + 16, j * 32f + 16)
+                            wallCreator.wall(i * 32f + 16, j * 32f + 16, 3)
 
 
                         } else {
-                            if(Random.nextInt() % 5 == 0) {
-                                wallCreator.wall(i * 32f + 16, j * 32f + 16, 3)
+                            if(Random.nextInt() % 17 == 0) {
+                                wallCreator.gate(i * 32f + 16, j * 32f + 16, 1)
+
+                            } else {
+                                itemCreator.score(i * 32f + 16 + 16, j * 32f + 16 + 16)
+
+                                //                                wallCreator.box(i * 32f + 16, j * 32f + 16, 3)
                             }
                         }
                     }
@@ -102,10 +108,10 @@ class LevelCreator {
 
             }
         }
-        floorObjects.teleport(128f + 16, 96f + 16, 1, 2)
-       // floorObjects.teleport(64+64f+64-16+256, 64f + 128f-16 + 32 ,  2, 1)
+        floorObjects.switch(128f + 16, 96f + 16, 1,)
+        wallCreator.gate(64+64f+64-16+256, 64f + 128f-16 + 32 ,  1)
 
-        wallCreator.stone(64+64f+64-16+256, 64f + 128f-16 + 32 )
+        wallCreator.turret(64+64f+64-16+256, 64f + 128f-16 + 32 , 300, Vector2(0f, 1f))
 
         log.info("Map created")
     }

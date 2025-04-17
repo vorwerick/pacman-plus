@@ -29,7 +29,7 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
         val positionComponent = world.getEntity(entityId).getComponent(PositionComponent::class.java)
         val damageComponent = world.getEntity(entityId).getComponent(DamageComponent::class.java)
         val pushableComponent = world.getEntity(entityId).getComponent(PushableComponent::class.java)
-        val hitPointsComponent = world.getEntity(entityId).getComponent(HitPointsComponent::class.java)
+        val lifecycleComponent = world.getEntity(entityId).getComponent(LifecycleComponent::class.java)
         val lootComponent = world.getEntity(entityId).getComponent(LootComponent::class.java)
         val lifespanComponent = world.getEntity(entityId).getComponent(LifespanComponent::class.java)
         val activateComponent = world.getEntity(entityId).getComponent(ActivateComponent::class.java)
@@ -41,7 +41,7 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
         configuration.shapeRenderer.setAutoShapeType(true)
         configuration.shapeRenderer.begin(ShapeType.Line)
         if (rectangleCollisionComponent.solid) {
-            val isInvulnerable = hitPointsComponent.state == HitPoint.Invulnerable
+            val isInvulnerable = lifecycleComponent.isInvulnerable()
             val isPushable = pushableComponent != null
             val isLoot = lootComponent != null
             val isActiveable = activateComponent != null

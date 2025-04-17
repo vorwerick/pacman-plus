@@ -1,6 +1,7 @@
 package cz.pacmanplus.game.core.systems.physics.collisions
 
 import com.artemis.Aspect
+import com.artemis.BaseSystem
 import com.artemis.Entity
 import com.artemis.World
 import com.artemis.systems.EntityProcessingSystem
@@ -10,16 +11,15 @@ import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.attributes.PressureComponent
 import cz.pacmanplus.game.core.components.attributes.SwitchableComponent
+import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.physics.*
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
 /// For entities who can switch
-class SwitchSystem :
-    EntityProcessingSystem(
-        Aspect.one(CircleCollisionComponent::class.java)
-            .all(PositionComponent::class.java, PressureComponent::class.java)
-    ) {
+class SwitchSystem : EntityProcessingSystem(
+    Aspect.one(CircleCollisionComponent::class.java).all(PositionComponent::class.java, PressureComponent::class.java)
+) {
     val log = LoggerFactory.getLogger("SwitchSystem")
 
 
@@ -53,6 +53,10 @@ class SwitchSystem :
             if (!switchableComponent.usingEntities.contains(switcher.id)) {
                 switchableComponent.enabled = !switchableComponent.enabled
                 switchableComponent.usingEntities.add(switcher.id)
+
+                switchable.switchEffect()
+                println("USED")
+                switcher.useEffect()
             }
         }
     }
@@ -65,11 +69,27 @@ class SwitchSystem :
         }
     }
 
+
 }
 
 fun World.findSwitchablePoints(): IntBag {
     return this.aspectSubscriptionManager.get(
-        Aspect
-            .all(SwitchableComponent::class.java, PositionComponent::class.java)
+        Aspect.all(SwitchableComponent::class.java, PositionComponent::class.java)
     ).entities ?: IntBag()
 }
+
+
+fun Entity.switchEffect() {
+    this.getComponent(DrawableStateComponent::class.java)?.let { drawableState ->
+        drawableState.changeState()
+    }
+
+    //todo play audio
+}
+
+fun Entity.useEffect() {
+    // use effect
+
+    //todo play audio
+}
+

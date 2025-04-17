@@ -6,6 +6,7 @@ import com.artemis.systems.EntityProcessingSystem
 import com.badlogic.gdx.Gdx
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.attributes.*
+import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.physics.RectangleCollisionComponent
 import cz.pacmanplus.game.core.systems.physics.collisions.findSwitchablePoints
 import cz.pacmanplus.game.core.systems.physics.collisions.findButtons
@@ -22,7 +23,6 @@ class GateSystem :
 
 
     override fun process(e: Entity?) {
-
 
 
         e?.let { entity: Entity ->
@@ -53,6 +53,8 @@ class GateSystem :
                     switchable.getComponent(SwitchableComponent::class.java)?.let { sw ->
                         if (sw.groupId == activate.group) {
                             rectangleCollisionComponent.solid = !sw.enabled
+                            entity.getComponent(DrawableStateComponent::class.java)
+                                ?.let { drawableState -> drawableState.changeState(if (!sw.enabled) 0 else 1) }
                         }
                     }
 

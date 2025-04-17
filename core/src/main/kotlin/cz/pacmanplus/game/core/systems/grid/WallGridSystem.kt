@@ -4,13 +4,14 @@ import com.artemis.Aspect
 import com.artemis.BaseSystem
 import com.artemis.World
 import com.artemis.utils.IntBag
+import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.objects.WallComponent
 import cz.pacmanplus.game.core.components.physics.PositionComponent
 import cz.pacmanplus.utils.IterableGrid
 
-class WallGridSystem(val width: Int, val height: Int) :BaseSystem() {
+class WallGridSystem(private val gameState: GameState) : BaseSystem() {
 
-    val wallGrid = IterableGrid(width, height)
+    val wallGrid = IterableGrid(gameState.map.tileWidth, gameState.map.tileHeight)
 
     fun sync() {
 
@@ -19,7 +20,7 @@ class WallGridSystem(val width: Int, val height: Int) :BaseSystem() {
     override fun processSystem() {
         val areas = world.findAllWallObjects()
         wallGrid.clear()
-        wallGrid.forEachGrid {x, y, value ->
+        wallGrid.forEachGrid { x, y, value ->
             (0 until areas.size()).forEach { index ->
                 val id = areas.get(index)
                 val e = world.getEntity(id)

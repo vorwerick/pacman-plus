@@ -36,9 +36,9 @@ class ComputerPatrolSystem :
                             val targetPosition = player!!.getComponent(PositionComponent::class.java)
                             val targetX = ((targetPosition.x + 16) / 32).toInt()
                             val targetY = ((targetPosition.y + 16) / 32).toInt()
-                            println(targetX .toString()+ " "+targetY + "( ${grid.getGrid().size})")
+                          //  println(targetX .toString()+ " "+targetY + "( ${grid.getGrid().size})")
                             computerPatrolComponent.path = grid.findPath(tileX, tileY, targetX, targetY).toMutableList()
-                            println(computerPatrolComponent.path)
+                            //println(computerPatrolComponent.path)
 
                         }
 

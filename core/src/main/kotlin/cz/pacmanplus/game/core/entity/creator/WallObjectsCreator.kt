@@ -1,22 +1,17 @@
 package cz.pacmanplus.game.core.entity.creator
 
-import com.badlogic.gdx.Gdx
-import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
-import com.badlogic.gdx.graphics.g2d.TextureAtlas
-import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasSprite
 import com.badlogic.gdx.graphics.g2d.TextureRegion
-import cz.pacmanplus.game.core.components.attributes.ActivateComponent
-import cz.pacmanplus.game.core.components.attributes.DelayComponent
-import cz.pacmanplus.game.core.components.attributes.ExplosionComponent
-import cz.pacmanplus.game.core.components.attributes.PressureComponent
-import cz.pacmanplus.game.core.components.graphics.TexturesComponent
+import com.badlogic.gdx.math.Vector2
+import cz.pacmanplus.game.core.components.attributes.*
+import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.objects.WallComponent
 import cz.pacmanplus.game.core.components.physics.*
 import cz.pacmanplus.game.core.entity.WallObjects
 import cz.pacmanplus.game.core.entity.newEntity
+import cz.pacmanplus.game.graphics.*
+import cz.pacmanplus.screens.Loader
 import org.slf4j.LoggerFactory
-import java.awt.TextComponent
 
 class WallObjectsCreator : WallObjects {
 
@@ -40,16 +35,14 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Invulnerable
+            create(LifecycleComponent::class.java).apply {
+                setInvulnerable()
             }
 
-
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("egypt/Walls_Overlap.png")
-                val frames = TextureRegion.split(texture, 32, 38)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Wall(3))
             }
+
         }
     }
 
@@ -65,13 +58,14 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Alive(hitPoints)
+            create(LifecycleComponent::class.java).apply {
+                setAlive(hitPoints)
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/wall.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Wall(3))
+                addDrawableState(Wall(2))
+                addDrawableState(Wall(1))
+                addDrawableState(Wall(0))
             }
         }
     }
@@ -89,16 +83,78 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Alive(hitPoints)
+            create(LifecycleComponent::class.java).apply {
+                setAlive(hitPoints)
             }
             create(PressureComponent::class.java).apply {
 
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/box.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Box())
+            }
+        }
+    }
+
+    override fun turret(x: Float, y: Float, hitPoints: Int, direction: Vector2) {
+        newEntity("Turret").apply {
+            create(WallComponent::class.java)
+            create(PushableComponent::class.java)
+            create(PositionComponent::class.java).apply {
+                this.x = x
+                this.y = y
+            }
+            create(RectangleCollisionComponent::class.java).apply {
+                width = FLOOR_SIZE * 1f
+                height = FLOOR_SIZE * 1f
+                solid = true
+            }
+            create(LifecycleComponent::class.java).apply {
+                setAlive(hitPoints)
+            }
+            create(PressureComponent::class.java).apply {
+
+            }
+            create(SpeedComponent::class.java).apply {
+                this.speed = 150
+            }
+            create(DirectionComponent::class.java).apply {
+                this.direction = direction
+            }
+            create(TimeComponent::class.java).apply {
+                setTimer(seconds = 2)
+            }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Wall(3))
+                addDrawableState(Wall(2))
+                addDrawableState(Wall(1))
+                addDrawableState(Wall(0))
+            }
+        }
+    }
+
+    override fun generator(x: Float, y: Float, hitPoints: Int) {
+        newEntity("Generator").apply {
+            create(WallComponent::class.java)
+            create(PositionComponent::class.java).apply {
+                this.x = x
+                this.y = y
+            }
+            create(RectangleCollisionComponent::class.java).apply {
+                width = FLOOR_SIZE * 1f
+                height = FLOOR_SIZE * 1f
+                solid = true
+            }
+            create(LifecycleComponent::class.java).apply {
+                setAlive(hitPoints)
+            }
+            create(GeneratorComponent::class.java).apply {
+
+            }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Wall(3))
+                addDrawableState(Wall(2))
+                addDrawableState(Wall(1))
+                addDrawableState(Wall(0))
             }
         }
     }
@@ -115,8 +171,8 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Alive(hitPoints)
+            create(LifecycleComponent::class.java).apply {
+                setAlive(hitPoints)
             }
             create(LootComponent::class.java).apply {
                 loot = Item.Life
@@ -124,11 +180,11 @@ class WallObjectsCreator : WallObjects {
             create(UnlockableComponent::class.java).apply {
                 this.keyType = keyType
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/chest.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Chest(locked = true))
+                addDrawableState(Chest(locked = false))
             }
+
         }
     }
 
@@ -147,14 +203,15 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f / 2
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Invulnerable
+            create(LifecycleComponent::class.java).apply {
+                setInvulnerable()
             }
 
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/stone.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Wall(3))
+                addDrawableState(Wall(2))
+                addDrawableState(Wall(1))
+                addDrawableState(Wall(0))
             }
         }
 
@@ -175,8 +232,12 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Invulnerable
+            create(LifecycleComponent::class.java).apply {
+                setInvulnerable()
+            }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Gate(opened = false))
+                addDrawableState(Gate(opened = true))
             }
         }
     }
@@ -193,16 +254,15 @@ class WallObjectsCreator : WallObjects {
                 height = FLOOR_SIZE * 1f
                 solid = true
             }
-            create(HitPointsComponent::class.java).apply {
-                state = HitPoint.Invulnerable
+            create(LifecycleComponent::class.java).apply {
+                setInvulnerable()
             }
             create(UnlockableComponent::class.java).apply {
                 this.keyType = keyType
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/door.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Gate(opened = false))
+                addDrawableState(Gate(opened = true))
             }
         }
     }
@@ -210,25 +270,28 @@ class WallObjectsCreator : WallObjects {
     override fun bomb(x: Float, y: Float) {
         newEntity("Bomb").apply {
             create(WallComponent::class.java)
-            //create(PushableComponent::class.java)
+            create(PushableComponent::class.java)
             create(PositionComponent::class.java).apply {
-                this.x = x
-                this.y = y
+                this.x = x - 16
+                this.y = y - 16
             }
-            create(CircleCollisionComponent::class.java).apply {
-                radius = 16f
+            create(RectangleCollisionComponent::class.java).apply {
+                width = FLOOR_SIZE * 1f
+                height = FLOOR_SIZE * 1f
+                solid = true
             }
-            create(DelayComponent::class.java).apply {
-                delay = 3000f
+            create(TimeComponent::class.java).apply {
+                setTimer(seconds = 3)
             }
             create(ExplosionComponent::class.java).apply {
 
             }
+            create(LifecycleComponent::class.java).apply {
+                setInvulnerable()
+            }
 
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/bomb.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Bomb())
             }
         }
 

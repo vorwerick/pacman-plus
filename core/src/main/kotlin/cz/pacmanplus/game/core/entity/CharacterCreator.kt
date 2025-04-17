@@ -9,8 +9,10 @@ import cz.pacmanplus.game.core.components.control.ComputerPathComponent
 import cz.pacmanplus.game.core.components.control.PlayerComponent
 import cz.pacmanplus.game.core.components.control.InputComponent
 import cz.pacmanplus.game.core.components.control.computer.FindPlayerComponent
-import cz.pacmanplus.game.core.components.graphics.TexturesComponent
+import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.physics.*
+import cz.pacmanplus.game.graphics.EnemyMummy
+import cz.pacmanplus.game.graphics.Player
 import org.slf4j.LoggerFactory
 
 class CharacterCreator {
@@ -51,6 +53,12 @@ class CharacterCreator {
             create(PressureComponent::class.java).apply {
 
             }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Player(0))
+                addDrawableState(Player(1))
+                addDrawableState(Player(2))
+                addDrawableState(Player(3))
+            }
         }
     }
 
@@ -59,7 +67,7 @@ class CharacterCreator {
             create(CharacterComponent::class.java)
             create(ComputerPathComponent::class.java)
             create(FindPlayerComponent::class.java)
-           // create(InputComponent::class.java)
+            // create(InputComponent::class.java)
             create(PositionComponent::class.java).apply {
                 val currentXTile = ((x + 16) / 32).toInt()
                 val currentYTile = ((y + 16) / 32).toInt()
@@ -80,10 +88,11 @@ class CharacterCreator {
             create(PressureComponent::class.java).apply {
 
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/enemy.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(EnemyMummy(0))
+                addDrawableState(EnemyMummy(1))
+                addDrawableState(EnemyMummy(2))
+                addDrawableState(EnemyMummy(3))
             }
         }
     }

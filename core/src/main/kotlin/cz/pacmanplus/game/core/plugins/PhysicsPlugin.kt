@@ -24,6 +24,9 @@ class PhysicsPlugin : ArtemisPlugin {
         p0?.with(PickupSystem())
         p0?.with(ExplosionSystem())
         p0?.with(TeleportSystem())
+        p0?.with(TurretSystem())
+        p0?.with(GeneratorSystem())
+
 
     }
 }

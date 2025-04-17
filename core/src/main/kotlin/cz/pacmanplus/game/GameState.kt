@@ -1,5 +1,7 @@
 package cz.pacmanplus.game
 
+import cz.pacmanplus.assets.LevelTheme
+
 sealed class State {
     data object Initial : State()
     data object Loading : State()
@@ -18,4 +20,12 @@ class GameState {
 
     var graphicsMode: GraphicsMode = GraphicsMode.Debug
     var state: State = State.Initial
+
+
+
+    var map: MapLevel = MapLevel(32, 32, LevelTheme.Egypt)
+}
+
+class MapLevel(val tileWidth: Int, val tileHeight: Int, val levelTheme: LevelTheme) {
+
 }

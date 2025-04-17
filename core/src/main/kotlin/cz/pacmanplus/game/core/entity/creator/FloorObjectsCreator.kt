@@ -4,11 +4,13 @@ import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.core.components.attributes.*
-import cz.pacmanplus.game.core.components.graphics.TexturesComponent
+import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.objects.FloorComponent
 import cz.pacmanplus.game.core.components.physics.*
 import cz.pacmanplus.game.core.entity.FloorObjects
 import cz.pacmanplus.game.core.entity.newEntity
+import cz.pacmanplus.game.graphics.Explosion
+import cz.pacmanplus.game.graphics.Lever
 import org.slf4j.LoggerFactory
 
 class FloorObjectsCreator : FloorObjects {
@@ -53,6 +55,11 @@ class FloorObjectsCreator : FloorObjects {
                 enabled = false
                 groupId = group
             }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Lever(enabled = true))
+                addDrawableState(Lever(enabled = false))
+            }
+
         }
     }
 
@@ -116,10 +123,9 @@ class FloorObjectsCreator : FloorObjects {
                 address = addressId
                 target = targetId
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/portal.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Lever(enabled = true))
+                addDrawableState(Lever(enabled = false))
             }
         }
     }
@@ -140,12 +146,12 @@ class FloorObjectsCreator : FloorObjects {
         newEntity("Explosion").apply {
             create(FloorComponent::class.java)
             create(PositionComponent::class.java).apply {
-                this.x = x -16
+                this.x = x - 16
                 this.y = y - 16
             }
             create(RectangleCollisionComponent::class.java).apply {
-                width = (FLOOR_SIZE )* 1f
-                height = (FLOOR_SIZE )*1f
+                width = (FLOOR_SIZE) * 1f
+                height = (FLOOR_SIZE) * 1f
             }
             create(DamageComponent::class.java).apply {
                 persistent = true
@@ -153,10 +159,62 @@ class FloorObjectsCreator : FloorObjects {
             create(LifespanComponent::class.java).apply {
                 frames = 30
             }
-            create(TexturesComponent::class.java).apply {
-                val texture = Texture("temp/explosion.png")
-                val frames = TextureRegion.split(texture, 32, 32)
-                textures = frames.flatten()
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Explosion())
+            }
+        }
+    }
+
+    override fun ray(x: Float, y: Float) {
+        newEntity("Ray").apply {
+            create(FloorComponent::class.java)
+            create(PositionComponent::class.java).apply {
+                this.x = x - 16
+                this.y = y - 16
+            }
+            create(RectangleCollisionComponent::class.java).apply {
+                width = (FLOOR_SIZE) * 1f
+                height = (FLOOR_SIZE) * 1f
+            }
+            create(DamageComponent::class.java).apply {
+                persistent = true
+            }
+            create(LifespanComponent::class.java).apply {
+                frames = 30
+            }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Lever(enabled = true))
+                addDrawableState(Lever(enabled = false))
+            }
+        }
+    }
+
+    override fun projectile(x: Float, y: Float, speed: Int, direction: Vector2) {
+        newEntity("Projectile").apply {
+            create(FloorComponent::class.java)
+            create(PositionComponent::class.java).apply {
+                this.x = x
+                this.y = y
+            }
+            create(MovementComponent::class.java).apply {
+
+            }
+            create(SpeedComponent::class.java).apply {
+                this.speed = speed
+            }
+            create(DirectionComponent::class.java).apply {
+                this.direction = direction
+            }
+            create(RectangleCollisionComponent::class.java).apply {
+                width = (FLOOR_SIZE) * 1f
+                height = (FLOOR_SIZE) * 1f
+            }
+            create(DamageComponent::class.java).apply {
+                persistent = true
+            }
+            create(DrawableStateComponent::class.java).apply {
+                addDrawableState(Lever(enabled = true))
+                addDrawableState(Lever(enabled = false))
             }
         }
     }

@@ -34,6 +34,8 @@ class GameScreen : KtxScreen {
         levelCreator.createLevelEmpty(32, 32)
 
         log.debug("Screen initialized")
+
+
     }
 
 
@@ -90,8 +92,8 @@ class GameScreen : KtxScreen {
     override fun resize(w: Int, h: Int) {
         log.debug("Window resized {}", Vector2(w.toFloat(), h.toFloat()))
         val cam = getKoin().get<PlayerCamera>()
-        cam.camera.viewportWidth = w.toFloat()
-        cam.camera.viewportHeight = h.toFloat()
+       // cam.camera.viewportWidth = w.toFloat()
+       // cam.camera.viewportHeight = h.toFloat()
     }
 
     override fun pause() {

@@ -8,22 +8,15 @@ import com.artemis.utils.IntBag
 import com.badlogic.gdx.math.Circle
 import com.badlogic.gdx.math.Intersector
 import com.badlogic.gdx.math.Rectangle
-import cz.pacmanplus.game.GameState
-import cz.pacmanplus.game.core.components.pickup.KeyComponent
-import cz.pacmanplus.game.core.components.attributes.InventoryComponent
 import cz.pacmanplus.game.core.components.physics.*
-import cz.pacmanplus.game.core.components.pickup.ScoreComponent
-import cz.pacmanplus.game.core.components.pickup.SlotItemComponent
-import cz.pacmanplus.game.core.systems.lifecycle.HitpointsLifecycleSystem
 import cz.pacmanplus.utils.delete
-import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
 /// For entities who can pick
 class DamageSystem :
     EntityProcessingSystem(
         Aspect.one(CircleCollisionComponent::class.java, RectangleCollisionComponent::class.java)
-            .all(PositionComponent::class.java, HitPointsComponent::class.java)
+            .all(PositionComponent::class.java, LifecycleComponent::class.java)
     ) {
     val log = LoggerFactory.getLogger("DamageSystem")
 
@@ -45,9 +38,9 @@ class DamageSystem :
                 entity.getComponent(CircleCollisionComponent::class.java)?.let { circle ->
                     val colliderCircle = Circle(positionComponent.x, positionComponent.y, circle.radius)
                     if (Intersector.overlaps(colliderCircle, areaCollider)) {
-                        val destroy = dealDamageForDestroy(damageArea, entity)
+                        val destroy = makeDamageAndShouldBeDestroyed(damageArea, entity)
                         if (destroy) {
-                            delete(id, "Damage area overlaps the object")
+                            delete(id, "Damage area is not persistent to destroy")
                         }
                     }
                 }
@@ -56,9 +49,10 @@ class DamageSystem :
                     val colliderRect =
                         Rectangle(positionComponent.x, positionComponent.y, rectangle.width, rectangle.height)
                     if (Intersector.overlaps(colliderRect, areaCollider)) {
-                        val destroy = dealDamageForDestroy(damageArea, entity)
+                        val destroy = makeDamageAndShouldBeDestroyed(damageArea, entity)
                         if (destroy) {
-                            delete(id, "Damage area overlaps the object")
+                            delete(id, "Damage area is not persistent to destroy")
+
                         }
                     }
                 }
@@ -66,20 +60,14 @@ class DamageSystem :
         }
     }
 
-    private fun dealDamageForDestroy(damageArea: Entity, damageGiver: Entity): Boolean {
-        damageGiver.getComponent(HitPointsComponent::class.java)?.let { hitPoints ->
-            if (hitPoints.state is HitPoint.Alive) {
-                val aliveState = hitPoints.state as HitPoint.Alive
-                if (aliveState.value <= 0) {
-                    return false
+    private fun makeDamageAndShouldBeDestroyed(damageArea: Entity, damageGiver: Entity): Boolean {
+        damageGiver.getComponent(LifecycleComponent::class.java)?.let { lifecycle ->
+            lifecycle.decreaseHitpoints()
+            damageArea.getComponent(DamageComponent::class.java)?.let { damage ->
+                if (!damage.persistent) {
+                    return true
                 }
-                damageArea.getComponent(DamageComponent::class.java)?.let { damage ->
-                    hitPoints.state = HitPoint.Alive(aliveState.value - 1) // make damage
-                    if (!damage.persistent) {
-                        return true
-                    }
-                    return false
-                }
+                return false
             }
         }
         return false

@@ -11,6 +11,7 @@ import com.badlogic.gdx.math.Vector2
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.attributes.PressureComponent
 import cz.pacmanplus.game.core.components.attributes.ButtonComponent
+import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.physics.*
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
@@ -62,12 +63,16 @@ class ButtonSystem : EntityProcessingSystem(
     private fun untriggered(button: Entity) {
         button.getComponent(ButtonComponent::class.java)?.let { triggerableComponent ->
             triggerableComponent.triggered = false
+
+            button.triggerEffect()
         }
     }
 
     private fun triggered(button: Entity) {
         button.getComponent(ButtonComponent::class.java)?.let { triggerableComponent ->
             triggerableComponent.triggered = true
+
+            button.triggerEffect()
         }
     }
 
@@ -77,4 +82,13 @@ fun World.findButtons(): IntBag {
     return this.aspectSubscriptionManager.get(
         Aspect.all(ButtonComponent::class.java, PositionComponent::class.java)
     ).entities ?: IntBag()
+}
+
+
+fun Entity.triggerEffect() {
+    this.getComponent(DrawableStateComponent::class.java)?.let { drawableState ->
+        drawableState.changeState()
+    }
+
+    //todo play audio
 }

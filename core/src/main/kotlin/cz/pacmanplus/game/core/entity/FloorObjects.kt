@@ -12,6 +12,8 @@ interface FloorObjects {
     fun teleport(x: Float, y: Float, addressId: Int, targetId: Int) // teleport from A to B
     fun lava(x: Float, y: Float) // persistent damage area
     fun explosion(x: Float, y: Float) // short-term damage area
+    fun ray(x: Float, y: Float) // short-term damage area
+    fun projectile(x: Float, y: Float, speed: Int, direction: Vector2) // short-term damage area
     fun trapdoor(x: Float, y: Float) // switchable damage area
     fun ventilator(x: Float, y: Float, direction: Vector2, force: Int) // force area
     fun void(x: Float, y: Float) // no path
