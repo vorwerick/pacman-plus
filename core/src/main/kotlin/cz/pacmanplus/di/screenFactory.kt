@@ -2,6 +2,7 @@ package cz.pacmanplus.di
 
 import cz.pacmanplus.Navigator
 import cz.pacmanplus.RootUI
+import cz.pacmanplus.screens.EditorScreen
 import cz.pacmanplus.screens.GameScreen
 import cz.pacmanplus.screens.IntroScreen
 import cz.pacmanplus.screens.LoadingScreen
@@ -11,16 +12,21 @@ import org.koin.dsl.module
 val screenFactory = module {
     single<RootUI> { RootUI() }
     single<Navigator> { Navigator() }
-    factory<IntroScreen> {
+    single<IntroScreen> {
         IntroScreen()
     }
-    factory<LoadingScreen> {
+    single<LoadingScreen> {
         LoadingScreen()
     }
-    factory<MenuScreen> { MenuScreen() }
+    single<MenuScreen> {
+        MenuScreen()
+    }
 
-    factory<GameScreen> {
+    single<GameScreen> {
         GameScreen()
     }
-}
 
+    single<EditorScreen> {
+        EditorScreen()
+    }
+}

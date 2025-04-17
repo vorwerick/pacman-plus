@@ -28,7 +28,7 @@ class GameScreen : KtxScreen {
 
 
     init {
-        loadKoinModules(gameContext)
+       // loadKoinModules(gameContext)
 
         val levelCreator: LevelCreator = getKoin().get()
         levelCreator.createLevelEmpty(32, 32)

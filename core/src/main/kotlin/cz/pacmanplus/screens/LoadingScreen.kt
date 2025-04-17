@@ -18,6 +18,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import cz.pacmanplus.assets.AssetPaths
 import cz.pacmanplus.assets.getAll
+import cz.pacmanplus.showEditorScreen
 import cz.pacmanplus.showGameScreen
 import cz.pacmanplus.showMenuScreen
 import ktx.actors.centerPosition

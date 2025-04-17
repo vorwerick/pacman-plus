@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import cz.pacmanplus.di.gameContext
 import cz.pacmanplus.game.PlayerCamera
+import cz.pacmanplus.showEditorScreen
+import cz.pacmanplus.showGameScreen
 import ktx.app.KtxScreen
 import org.koin.core.context.loadKoinModules
 import org.koin.core.context.unloadKoinModules
@@ -37,21 +39,32 @@ class MenuScreen : KtxScreen {
         log.debug("Screen initialized")
 
         skin = VisUI.getSkin()
-        fps = Label("Intro screen", skin)
+        fps = Label("Menu screen", skin)
 
-        val button = TextButton("Click me", skin)
+        val gameButton = TextButton("Start Game", skin)
+        val editorButton = TextButton("Level Editor", skin)
 
-        fps.y += 32
-        button.addListener(object : ClickListener() {
+        fps.y += 32f
+        gameButton.y = 100f
+        editorButton.y = 150f
+
+        gameButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
-                println("Tlačítko bylo stisknuto!")
+                showGameScreen()
+                log.debug("Navigating to Game Screen")
             }
         })
 
+        editorButton.addListener(object : ClickListener() {
+            override fun clicked(event: InputEvent?, x: Float, y: Float) {
+                showEditorScreen()
+                log.debug("Navigating to Editor Screen")
+            }
+        })
 
-        // Přidání tlačítka na stagea
-
-        stage.addActor(button)
+        // Add actors to stage
+        stage.addActor(gameButton)
+        stage.addActor(editorButton)
         stage.addActor(fps)
 
     }

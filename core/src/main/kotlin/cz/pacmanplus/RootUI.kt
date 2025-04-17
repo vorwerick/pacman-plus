@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
 import cz.pacmanplus.di.accessories
 import cz.pacmanplus.di.screenFactory
+import cz.pacmanplus.screens.EditorScreen
 import cz.pacmanplus.screens.GameScreen
 import cz.pacmanplus.screens.IntroScreen
 import cz.pacmanplus.screens.LoadingScreen
@@ -78,6 +79,7 @@ class RootUI : KtxGame<KtxScreen>() {
 
 
 inline fun <reified T : KtxScreen> T.showMenuScreen() {
+    getKoin().get<RootUI>().addScreen(getKoin().get<MenuScreen>())
     getKoin().get<RootUI>().setScreen(MenuScreen::class.java)
 }
 
@@ -88,4 +90,9 @@ inline fun <reified T : KtxScreen> T.showIntroScreen() {
 inline fun <reified T : KtxScreen> T.showGameScreen() {
     getKoin().get<RootUI>().addScreen(getKoin().get<GameScreen>())
     getKoin().get<RootUI>().setScreen(GameScreen::class.java)
+}
+
+inline fun <reified T : KtxScreen> T.showEditorScreen() {
+    getKoin().get<RootUI>().addScreen(getKoin().get<EditorScreen>())
+    getKoin().get<RootUI>().setScreen(EditorScreen::class.java)
 }

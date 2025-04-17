@@ -8,6 +8,7 @@ import com.badlogic.gdx.files.FileHandle
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import cz.pacmanplus.di.accessories
+import cz.pacmanplus.di.gameContext
 import cz.pacmanplus.di.screenFactory
 import ktx.assets.async.AssetStorage
 import org.koin.core.context.startKoin
@@ -24,7 +25,7 @@ class ApplicationCore : ApplicationAdapter() {
 
 
         startKoin {
-            modules(listOf(accessories, screenFactory))
+            modules(listOf(accessories, screenFactory, gameContext))
             log.debug("Koin initialized")
         }
         rootUi.create()

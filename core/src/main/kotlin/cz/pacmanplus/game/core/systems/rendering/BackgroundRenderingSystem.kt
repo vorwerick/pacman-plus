@@ -3,7 +3,9 @@ package cz.pacmanplus.game.core.systems.rendering
 import com.artemis.Aspect
 import com.artemis.BaseSystem
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import cz.pacmanplus.assets.AssetPaths
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
@@ -13,7 +15,11 @@ import cz.pacmanplus.game.core.components.physics.PositionComponent
 import cz.pacmanplus.game.core.systems.physics.collisions.entities
 import cz.pacmanplus.game.graphics.findTexture
 
-class BackgroundRenderingSystem(val configuration: RenderingSystemConfiguration, val gameState: GameState) :
+class BackgroundRenderingSystem(
+    val spriteBatch: SpriteBatch,
+    val shapeRenderer: ShapeRenderer,
+    val gameState: GameState
+) :
     BaseSystem() {
 
 
@@ -21,18 +27,18 @@ class BackgroundRenderingSystem(val configuration: RenderingSystemConfiguration,
 
         val texture = TextureRegion.split(AssetPaths.floor(gameState.map.levelTheme).findTexture(), 32, 32)[0][0]
 
-        configuration.spriteBatch.begin()
+        spriteBatch.begin()
 
         val greyscale = 0.4f
         val alpha = 1f
-        configuration.spriteBatch.setColor(greyscale, greyscale, greyscale, alpha)
+        spriteBatch.setColor(greyscale, greyscale, greyscale, alpha)
         for (x in 0 until gameState.map.tileWidth) {
             for (y in 0 until gameState.map.tileHeight) {
 
-                configuration.spriteBatch.draw(texture, (32f * x) + 16, (32f * y) + 16,)
+                spriteBatch.draw(texture, (32f * x) + 16, (32f * y) + 16)
             }
         }
-        configuration.spriteBatch.color = Color.WHITE
-        configuration.spriteBatch.end()
+        spriteBatch.color = Color.WHITE
+        spriteBatch.end()
     }
 }

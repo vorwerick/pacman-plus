@@ -3,6 +3,8 @@ package cz.pacmanplus.game.core.systems.rendering
 import com.artemis.Aspect
 import com.artemis.systems.IteratingSystem
 import com.badlogic.gdx.graphics.Color
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType
 import cz.pacmanplus.game.PlayerCamera
 import cz.pacmanplus.game.core.components.attributes.ActivateComponent
@@ -12,7 +14,7 @@ import cz.pacmanplus.game.core.components.attributes.ButtonComponent
 import cz.pacmanplus.game.core.components.physics.*
 import org.koin.java.KoinJavaComponent.getKoin
 
-class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfiguration) : IteratingSystem(
+class PhysicsRectangleRenderingSystem(val spriteBatch: SpriteBatch, val shapeRenderer: ShapeRenderer) : IteratingSystem(
     Aspect.all(
         PositionComponent::class.java,
         RectangleCollisionComponent::class.java
@@ -23,8 +25,8 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
     override fun process(entityId: Int) {
         val cam: PlayerCamera = getKoin().get<PlayerCamera>()
 
-        configuration.shapeRenderer.projectionMatrix = cam.camera.combined
-        configuration.spriteBatch.projectionMatrix = cam.camera.combined
+        shapeRenderer.projectionMatrix = cam.camera.combined
+        spriteBatch.projectionMatrix = cam.camera.combined
 
         val positionComponent = world.getEntity(entityId).getComponent(PositionComponent::class.java)
         val damageComponent = world.getEntity(entityId).getComponent(DamageComponent::class.java)
@@ -38,60 +40,59 @@ class PhysicsRectangleRenderingSystem(val configuration: RenderingSystemConfigur
         val buttonComponent = world.getEntity(entityId).getComponent(ButtonComponent::class.java)
         val switchableComponent = world.getEntity(entityId).getComponent(SwitchableComponent::class.java)
 
-        configuration.shapeRenderer.setAutoShapeType(true)
-        configuration.shapeRenderer.begin(ShapeType.Line)
+        shapeRenderer.setAutoShapeType(true)
+        shapeRenderer.begin(ShapeType.Line)
         if (rectangleCollisionComponent.solid) {
             val isInvulnerable = lifecycleComponent.isInvulnerable()
             val isPushable = pushableComponent != null
             val isLoot = lootComponent != null
             val isActiveable = activateComponent != null
-            configuration.shapeRenderer.color = Color.GRAY
+            shapeRenderer.color = Color.GRAY
             if (isInvulnerable) {
-                configuration.shapeRenderer.color = Color.DARK_GRAY
+                shapeRenderer.color = Color.DARK_GRAY
             }
             if (isPushable) {
-                configuration.shapeRenderer.color = Color.LIGHT_GRAY
+                shapeRenderer.color = Color.LIGHT_GRAY
             }
-            if(isLoot){
-                configuration.shapeRenderer.color =  Color.ORANGE
+            if (isLoot) {
+                shapeRenderer.color = Color.ORANGE
             }
-            if(isActiveable){
-                configuration.shapeRenderer.color = Color.FOREST
+            if (isActiveable) {
+                shapeRenderer.color = Color.FOREST
             }
         } else {
-            if(lifespanComponent != null) {
-                configuration.shapeRenderer.color = Color.PINK
+            if (lifespanComponent != null) {
+                shapeRenderer.color = Color.PINK
             } else {
-                configuration.shapeRenderer.color = Color.BROWN
+                shapeRenderer.color = Color.BROWN
             }
-            if(buttonComponent != null) {
-                if(buttonComponent.triggered){
-                    configuration.shapeRenderer.color = Color.GREEN
+            if (buttonComponent != null) {
+                if (buttonComponent.triggered) {
+                    shapeRenderer.color = Color.GREEN
                 } else {
-                    configuration.shapeRenderer.color = Color.WHITE
+                    shapeRenderer.color = Color.WHITE
                 }
             }
-            if(switchableComponent != null) {
-                if(switchableComponent.enabled){
-                    configuration.shapeRenderer.color = Color.BLUE
+            if (switchableComponent != null) {
+                if (switchableComponent.enabled) {
+                    shapeRenderer.color = Color.BLUE
                 } else {
-                    configuration.shapeRenderer.color = Color.RED
+                    shapeRenderer.color = Color.RED
                 }
             }
 
         }
 
         if (damageComponent != null) {
-            configuration.shapeRenderer.color = Color.RED
+            shapeRenderer.color = Color.RED
         }
-        configuration.shapeRenderer.rect(
+        shapeRenderer.rect(
             positionComponent.x,
             positionComponent.y,
             rectangleCollisionComponent.width,
             rectangleCollisionComponent.height
         )
-        configuration.shapeRenderer.end()
-
+        shapeRenderer.end()
 
 
     }

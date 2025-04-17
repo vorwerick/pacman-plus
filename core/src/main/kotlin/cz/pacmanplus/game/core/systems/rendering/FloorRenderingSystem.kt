@@ -2,13 +2,15 @@ package cz.pacmanplus.game.core.systems.rendering
 
 import com.artemis.Aspect
 import com.artemis.BaseSystem
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.objects.FloorComponent
 import cz.pacmanplus.game.core.components.physics.CircleCollisionComponent
 import cz.pacmanplus.game.core.components.physics.PositionComponent
 import cz.pacmanplus.game.core.systems.physics.collisions.entities
 
-class FloorRenderingSystem(val configuration: RenderingSystemConfiguration) : BaseSystem() {
+class FloorRenderingSystem(val spriteBatch: SpriteBatch, shapeRenderer: ShapeRenderer) : BaseSystem() {
 
 
     override fun processSystem() {
@@ -21,19 +23,19 @@ class FloorRenderingSystem(val configuration: RenderingSystemConfiguration) : Ba
             )
                 .entities(world)
 
-        configuration.spriteBatch.begin()
+        spriteBatch.begin()
         entities.forEach { entity ->
             entity.getComponent(PositionComponent::class.java)?.let { position ->
 
                 entity.getComponent(DrawableStateComponent::class.java)?.let { animation ->
                     var offsetX = 0f
                     var offsetY = 0f
-                    animation.draw(configuration.spriteBatch, position.x - offsetX, position.y - offsetY)
+                    animation.draw(spriteBatch, position.x - offsetX, position.y - offsetY)
                 }
 
             }
         }
 
-        configuration.spriteBatch.end()
+        spriteBatch.end()
     }
 }

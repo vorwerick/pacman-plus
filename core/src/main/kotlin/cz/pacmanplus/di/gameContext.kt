@@ -3,6 +3,8 @@ package cz.pacmanplus.di
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.badlogic.gdx.graphics.Texture
+import com.badlogic.gdx.graphics.g2d.SpriteBatch
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import cz.pacmanplus.game.DefaultCameraConfiguration
@@ -26,6 +28,7 @@ import cz.pacmanplus.game.core.systems.update.*
 import cz.pacmanplus.screens.AssetLibrary
 import cz.pacmanplus.screens.PlayerState
 import org.koin.dsl.module
+import org.koin.java.KoinJavaComponent
 
 val gameContext = module {
     single<Stage> {
@@ -49,6 +52,7 @@ val gameContext = module {
     single<LevelCreator> { LevelCreator() }
     single<CharacterCreator> { CharacterCreator() }
     single<World> {
+
         World(
             WorldConfigurationBuilder()
               .with(PhysicsPlugin())
@@ -66,8 +70,8 @@ val gameContext = module {
                 .with(ProjectileMovementSystem())
                 .with(PathMovementSystem())
 
-                .with(PhysicsCircleRenderingSystem(configuration = DefaultRenderingSystemConfiguration))
-                .with(PhysicsRectangleRenderingSystem(configuration = DefaultRenderingSystemConfiguration))
+                .with(PhysicsCircleRenderingSystem(     get(),  get(),))
+                .with(PhysicsRectangleRenderingSystem(     get(),  get(),))
 
 
                 .with(PhysicsGuiSystem())
