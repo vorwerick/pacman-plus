@@ -35,14 +35,13 @@ class MenuScreen : KtxScreen {
 
 
 
-
         log.debug("Screen initialized")
 
         skin = VisUI.getSkin()
         fps = Label("Menu screen", skin)
 
         val gameButton = TextButton("Start Game", skin)
-        val editorButton = TextButton("Level Editor", skin)
+        val editorButton = TextButton("Level Editor.kt", skin)
 
         fps.y += 32f
         gameButton.y = 100f
@@ -58,7 +57,7 @@ class MenuScreen : KtxScreen {
         editorButton.addListener(object : ClickListener() {
             override fun clicked(event: InputEvent?, x: Float, y: Float) {
                 showEditorScreen()
-                log.debug("Navigating to Editor Screen")
+                log.debug("Navigating to Editor.kt Screen")
             }
         })
 
@@ -83,6 +82,7 @@ class MenuScreen : KtxScreen {
     }
 
     override fun show() {
+        Gdx.input.inputProcessor = stage
         log.debug("Window shown")
     }
 
@@ -103,6 +103,7 @@ class MenuScreen : KtxScreen {
     }
 
     override fun hide() {
+        Gdx.input.inputProcessor = null
         log.debug("Window hidden")
     }
 }

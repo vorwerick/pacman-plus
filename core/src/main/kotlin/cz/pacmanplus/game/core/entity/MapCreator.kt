@@ -1,13 +1,38 @@
 package cz.pacmanplus.game.core.entity
 
 import com.badlogic.gdx.math.Vector2
+import cz.pacmanplus.editor.entities.Level
+import cz.pacmanplus.editor.entities.Object
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
-class LevelCreator {
+class MapCreator {
 
     val log = LoggerFactory.getLogger("LevelCreator")
+
+    fun createFloors(grid: Array<Array<Object?>>) {
+
+    }
+
+    fun createWalls(grid: Array<Array<Object?>>) {
+
+    }
+
+    fun fromLevel(level: Level) {
+        val width = level.width
+        val height = level.height
+        val wallCreator: WallObjects = getKoin().get()
+        val itemCreator: ItemObjects = getKoin().get()
+        val floorObjects: FloorObjects = getKoin().get()
+        val characterCreator: CharacterCreator = getKoin().get()
+        level.layers.forEach { layer ->
+            when(layer.name){
+                "floor" -> createFloors(layer.grid)
+                "wall" -> createWalls(layer.grid)
+            }
+        }
+    }
 
     fun createLevelDebug(width: Int, height: Int) {
         val wallCreator: WallObjects = getKoin().get()
@@ -157,4 +182,5 @@ class LevelCreator {
 
         log.info("Map created")
     }
+
 }

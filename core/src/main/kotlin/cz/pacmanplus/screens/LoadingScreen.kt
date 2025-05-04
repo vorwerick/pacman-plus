@@ -89,12 +89,12 @@ class LoadingScreen : KtxScreen {
         if (assetManager.update()) {
             // Hotovo
             if (Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-                showGameScreen()
+            //    showGameScreen()
+                showMenuScreen()
             }
         } else {
             val progress = assetManager.progress // 0..1
             corpName.setText("Loading " + (assetManager.loadedAssets*1f) /(assetManager.getAll().size  - 1) * 100f)
-            println()
         }
 
         //sizeVal += delta

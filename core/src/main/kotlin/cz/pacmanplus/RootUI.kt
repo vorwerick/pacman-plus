@@ -75,10 +75,15 @@ class RootUI : KtxGame<KtxScreen>() {
         stopKoin()
         log.debug("Disposed")
     }
+
+    fun disposeCurrentScreen() {
+        currentScreen?.dispose()
+    }
 }
 
 
 inline fun <reified T : KtxScreen> T.showMenuScreen() {
+    getKoin().get<RootUI>().disposeCurrentScreen()
     getKoin().get<RootUI>().addScreen(getKoin().get<MenuScreen>())
     getKoin().get<RootUI>().setScreen(MenuScreen::class.java)
 }
@@ -93,6 +98,8 @@ inline fun <reified T : KtxScreen> T.showGameScreen() {
 }
 
 inline fun <reified T : KtxScreen> T.showEditorScreen() {
+    // Load the editor context module to make Editor available
+    org.koin.core.context.loadKoinModules(cz.pacmanplus.di.editorContext)
     getKoin().get<RootUI>().addScreen(getKoin().get<EditorScreen>())
     getKoin().get<RootUI>().setScreen(EditorScreen::class.java)
 }

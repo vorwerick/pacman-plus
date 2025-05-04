@@ -17,7 +17,6 @@ class SequenceAnimation(name: String, val frames: List<TextureRegion>, var index
 
     fun animate(onFinish: (() -> Unit)? = null) {
         stateTime += 1
-        println(stateTime)
         if (stateTime >= 1000 / speed) {
             stateTime = 0f
             index++

@@ -9,7 +9,7 @@ import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.GraphicsMode
 import cz.pacmanplus.game.PlayerCamera
 import cz.pacmanplus.game.State
-import cz.pacmanplus.game.core.entity.LevelCreator
+import cz.pacmanplus.game.core.entity.MapCreator
 import cz.pacmanplus.game.core.systems.rendering.PhysicsCircleRenderingSystem
 import cz.pacmanplus.game.core.systems.rendering.PhysicsRectangleRenderingSystem
 import ktx.app.KtxScreen
@@ -30,8 +30,8 @@ class LobbyScreen : KtxScreen {
     init {
         loadKoinModules(gameContext)
 
-        val levelCreator: LevelCreator = getKoin().get()
-        levelCreator.createLobbyLevel(8, 8, 64f, 64f)
+        val mapCreator: MapCreator = getKoin().get()
+        mapCreator.createLobbyLevel(8, 8, 64f, 64f)
 
         log.debug("Screen initialized")
     }

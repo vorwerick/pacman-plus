@@ -38,7 +38,6 @@ class BoxMovementSystem :
                 val isPushable = pushableComponent != null
                 if (isPushable) {
                     if (pushableComponent.pushDirection != Vector2.Zero) {
-                        println("TAK CO JE")
                         val newX = (pushableComponent.pushDirection.x) * 32
                         val newY = (pushableComponent.pushDirection.y) * 32
 

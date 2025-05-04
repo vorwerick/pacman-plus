@@ -12,21 +12,21 @@ import org.koin.dsl.module
 val screenFactory = module {
     single<RootUI> { RootUI() }
     single<Navigator> { Navigator() }
-    single<IntroScreen> {
+    factory<IntroScreen> {
         IntroScreen()
     }
-    single<LoadingScreen> {
+    factory<LoadingScreen> {
         LoadingScreen()
     }
-    single<MenuScreen> {
+    factory<MenuScreen> {
         MenuScreen()
     }
 
-    single<GameScreen> {
+    factory<GameScreen> {
         GameScreen()
     }
 
-    single<EditorScreen> {
+    factory<EditorScreen> {
         EditorScreen()
     }
 }

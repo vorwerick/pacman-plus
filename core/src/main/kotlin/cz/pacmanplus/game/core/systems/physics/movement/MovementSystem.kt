@@ -150,7 +150,6 @@ class MovementSystem :
                             if (passiveAbilities.pushForce >= 30f) {
                                 passiveAbilities.pushForce = 0f
                                 pushableComponent.pushDirection = Vector2(inputComponent.dir.x, inputComponent.dir.y)
-                                println(pushableComponent.pushDirection)
                             }
                         }
 

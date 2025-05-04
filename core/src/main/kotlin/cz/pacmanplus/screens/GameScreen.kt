@@ -4,17 +4,17 @@ import com.artemis.World
 import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.Input
 import com.badlogic.gdx.math.Vector2
-import cz.pacmanplus.di.gameContext
+import com.badlogic.gdx.scenes.scene2d.ui.Skin
+import com.kotcrab.vis.ui.VisUI
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.GraphicsMode
 import cz.pacmanplus.game.PlayerCamera
 import cz.pacmanplus.game.State
-import cz.pacmanplus.game.core.entity.LevelCreator
+import cz.pacmanplus.game.core.entity.MapCreator
 import cz.pacmanplus.game.core.systems.rendering.PhysicsCircleRenderingSystem
 import cz.pacmanplus.game.core.systems.rendering.PhysicsRectangleRenderingSystem
+import cz.pacmanplus.showMenuScreen
 import ktx.app.KtxScreen
-import org.koin.core.context.loadKoinModules
-import org.koin.core.context.unloadKoinModules
 import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 
@@ -25,13 +25,28 @@ class GameScreen : KtxScreen {
 
     var physicsMode = true
     var paused = false
+    lateinit var skin: Skin
+    var editorMode = false
 
 
     init {
        // loadKoinModules(gameContext)
 
-        val levelCreator: LevelCreator = getKoin().get()
-        levelCreator.createLevelEmpty(32, 32)
+        skin = VisUI.getSkin()
+        log.info("Skin loaded")
+
+
+        val mapCreator: MapCreator = getKoin().get()
+        // Use the new level loading system
+        try {
+            //mapCreator.createLevelFromFile("levels/level1.json")
+            log.info("Level loaded from file successfully")
+        } catch (e: Exception) {
+            log.error("Failed to load level from file: ${e.message}")
+            log.info("Falling back to default level")
+           // mapCreator.createLevelEmpty(32, 32)
+        }
+        MapCreator().createLevelDebug(30, 30)
 
         log.debug("Screen initialized")
 
@@ -42,6 +57,7 @@ class GameScreen : KtxScreen {
     override fun render(delta: Float) {
         handleGfxModeInput()
         handlePauseUnpauseInput()
+        handleExitGameInput()
         handleInitialGame()
         handlePreparedGame()
 
@@ -81,7 +97,8 @@ class GameScreen : KtxScreen {
 
     override fun dispose() {
         getKoin().get<World>().dispose()
-        unloadKoinModules(gameContext)
+       // unloadKoinModules(gameContext)
+        log.info("Game screen was disposed")
     }
 
     override fun show() {
@@ -124,11 +141,22 @@ class GameScreen : KtxScreen {
 
     private fun handlePauseUnpauseInput() {
         val gameState = getKoin().get<GameState>()
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.P)) {
             if (gameState.state is State.Running) {
                 gameState.state = State.Paused
             } else if (gameState.state is State.Paused) {
                 gameState.state = State.Running
+            }
+            log.info("Physics mode was " + if (physicsMode) "enabled" else "disabled")
+        }
+    }
+
+    private fun handleExitGameInput() {
+        val gameState = getKoin().get<GameState>()
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            if (gameState.state is State.Running) {
+                gameState.state = State.Finished
+                showMenuScreen()
             }
             log.info("Physics mode was " + if (physicsMode) "enabled" else "disabled")
         }

@@ -1,7 +1,9 @@
 characters/character_solo_x2.png
 characters/foes_solo_x2.png
+editor/icons.png
 egypt/Ground.png
 egypt/Walls_Overlap.png
+levels/level1.json
 logo.png
 miscellaneous/Bomb_Body.png
 miscellaneous/Bomb_Fuse.png
