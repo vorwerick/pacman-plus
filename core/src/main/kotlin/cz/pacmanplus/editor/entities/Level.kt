@@ -17,7 +17,10 @@ class Level(val width: Int, val height: Int, val cellSize: Int, val offsetX: Int
             append(":")
             append(offsetY)
             append(":")
-            layers.map { it.deserialize() }
+            // Serialize layers and join them with semicolons
+            if (layers.isNotEmpty()) {
+                append(layers.joinToString(";") { it.deserialize() })
+            }
             append("!")
         }.toString().toByteArray()
     }
@@ -37,6 +40,21 @@ class Level(val width: Int, val height: Int, val cellSize: Int, val offsetX: Int
                 val offsetX = parts[3].toInt()
                 val offsetY = parts[4].toInt()
 
+                val level = Level(width, height, cellSize, offsetX, offsetY)
+
+                // If there are layer data in the parts, deserialize them
+                if (parts.size > 5 && parts[5].isNotEmpty()) {
+                    val layerData = parts[5]
+                    val layers = layerData.split(";")
+                    layers.forEach { layerStr ->
+                        if (layerStr.isNotEmpty()) {
+                            val layer = Layer.serialize(layerStr)
+                            level.layers.add(layer)
+                        }
+                    }
+                }
+
+                return level
             }
 
             return null

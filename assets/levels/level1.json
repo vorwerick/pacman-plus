@@ -1,87 +1,21 @@
 {
   "width": 10,
   "height": 10,
-  "walls": [
-    { "x": 16, "y": 16, "type": "bedrock" },
-    { "x": 48, "y": 16, "type": "bedrock" },
-    { "x": 80, "y": 16, "type": "bedrock" },
-    { "x": 112, "y": 16, "type": "bedrock" },
-    { "x": 144, "y": 16, "type": "bedrock" },
-    { "x": 176, "y": 16, "type": "bedrock" },
-    { "x": 208, "y": 16, "type": "bedrock" },
-    { "x": 240, "y": 16, "type": "bedrock" },
-    { "x": 272, "y": 16, "type": "bedrock" },
-    { "x": 304, "y": 16, "type": "bedrock" },
+  "layers": [
+    {
+      "name": "walls",
+      "objects": [
+        {
+          "x": 0,
+          "y": 0,
+          "type": "wall",
+          "visible": true,
+          "properties": {
 
-    { "x": 16, "y": 304, "type": "bedrock" },
-    { "x": 48, "y": 304, "type": "bedrock" },
-    { "x": 80, "y": 304, "type": "bedrock" },
-    { "x": 112, "y": 304, "type": "bedrock" },
-    { "x": 144, "y": 304, "type": "bedrock" },
-    { "x": 176, "y": 304, "type": "bedrock" },
-    { "x": 208, "y": 304, "type": "bedrock" },
-    { "x": 240, "y": 304, "type": "bedrock" },
-    { "x": 272, "y": 304, "type": "bedrock" },
-    { "x": 304, "y": 304, "type": "bedrock" },
+          }
+        }
 
-    { "x": 16, "y": 48, "type": "bedrock" },
-    { "x": 16, "y": 80, "type": "bedrock" },
-    { "x": 16, "y": 112, "type": "bedrock" },
-    { "x": 16, "y": 144, "type": "bedrock" },
-    { "x": 16, "y": 176, "type": "bedrock" },
-    { "x": 16, "y": 208, "type": "bedrock" },
-    { "x": 16, "y": 240, "type": "bedrock" },
-    { "x": 16, "y": 272, "type": "bedrock" },
-
-    { "x": 304, "y": 48, "type": "bedrock" },
-    { "x": 304, "y": 80, "type": "bedrock" },
-    { "x": 304, "y": 112, "type": "bedrock" },
-    { "x": 304, "y": 144, "type": "bedrock" },
-    { "x": 304, "y": 176, "type": "bedrock" },
-    { "x": 304, "y": 208, "type": "bedrock" },
-    { "x": 304, "y": 240, "type": "bedrock" },
-    { "x": 304, "y": 272, "type": "bedrock" },
-
-    { "x": 80, "y": 80, "type": "wall", "hitPoints": 3 },
-    { "x": 144, "y": 80, "type": "wall", "hitPoints": 3 },
-    { "x": 208, "y": 80, "type": "wall", "hitPoints": 3 },
-    { "x": 80, "y": 144, "type": "wall", "hitPoints": 3 },
-    { "x": 144, "y": 144, "type": "wall", "hitPoints": 3 },
-    { "x": 208, "y": 144, "type": "wall", "hitPoints": 3 },
-    { "x": 80, "y": 208, "type": "wall", "hitPoints": 3 },
-    { "x": 144, "y": 208, "type": "wall", "hitPoints": 3 },
-    { "x": 208, "y": 208, "type": "wall", "hitPoints": 3 },
-
-    { "x": 112, "y": 112, "type": "box", "hitPoints": 1 },
-    { "x": 176, "y": 112, "type": "box", "hitPoints": 1 },
-    { "x": 112, "y": 176, "type": "box", "hitPoints": 1 },
-    { "x": 176, "y": 176, "type": "box", "hitPoints": 1 },
-
-    { "x": 240, "y": 240, "type": "gate", "group": 1 }
-  ],
-  "items": [
-    { "x": 48, "y": 48, "type": "score" },
-    { "x": 112, "y": 48, "type": "score" },
-    { "x": 176, "y": 48, "type": "score" },
-    { "x": 240, "y": 48, "type": "score" },
-    { "x": 48, "y": 112, "type": "score" },
-    { "x": 240, "y": 112, "type": "score" },
-    { "x": 48, "y": 176, "type": "score" },
-    { "x": 240, "y": 176, "type": "score" },
-    { "x": 48, "y": 240, "type": "score" },
-    { "x": 112, "y": 240, "type": "score" },
-    { "x": 176, "y": 240, "type": "score" },
-
-    { "x": 272, "y": 48, "type": "life" },
-    { "x": 272, "y": 240, "type": "shield" }
-  ],
-  "floors": [
-    { "x": 64, "y": 64, "type": "start" },
-    { "x": 272, "y": 272, "type": "finish" },
-    { "x": 144, "y": 272, "type": "switch", "group": 1 }
-  ],
-  "characters": [
-    { "x": 64, "y": 64, "type": "player" },
-    { "x": 240, "y": 80, "type": "enemyPatrol" }
+      ]
+    }
   ]
 }
