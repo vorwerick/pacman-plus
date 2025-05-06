@@ -2,6 +2,7 @@ package cz.pacmanplus.game.core.systems.rendering
 
 import com.artemis.BaseSystem
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.Input
 import com.badlogic.gdx.graphics.Camera
 import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.g2d.SpriteBatch
@@ -37,6 +38,17 @@ class GameStateRenderer(val spriteBatch: SpriteBatch, val shapeRenderer: ShapeRe
 
     val levelButtons: MutableMap<Int, TextButton> = mutableMapOf()
 
+    // Grid configuration
+    private val gridColumns = 5
+    private val gridSpacingX = 100f
+    private val gridSpacingY = 100f
+    private val startX = 100f
+    private val startY = 400f
+
+    // Selected level tracking
+    private var selectedLevelX = 0
+    private var selectedLevelY = 0
+    private var selectedLevel = 0
 
     init {
         skin = VisUI.getSkin()
@@ -45,7 +57,6 @@ class GameStateRenderer(val spriteBatch: SpriteBatch, val shapeRenderer: ShapeRe
         stageLoadingLevel= Stage(ScreenViewport())
         stageLevelSelection = Stage(ScreenViewport())
         stageEditor = Stage(ScreenViewport())
-
     }
 
 
@@ -127,20 +138,84 @@ class GameStateRenderer(val spriteBatch: SpriteBatch, val shapeRenderer: ShapeRe
 
         val levels = getKoin().get<LevelLibrary>().levels
 
+        // Clear stage before adding actors
+        stageLevelSelection.clear()
+
+        // Add title label
+        val titleLabel = Label("Level Selection", skin)
+        titleLabel.setPosition(Gdx.graphics.width / 2f - titleLabel.width / 2f, Gdx.graphics.height - 100f)
+        stageLevelSelection.addActor(titleLabel)
+
+        // Create level buttons in a grid
         levels.forEachIndexed { index, level ->
             if(!levelButtons.containsKey(index)){
-                levelButtons[index] = createToolButton("Level ${index + 1}", index).apply {
-                    setPosition(192f * index, 192f)
-                }
+                levelButtons[index] = createToolButton("Level ${index + 1}", index)
+            }
+
+            // Calculate grid position
+            val row = index / gridColumns
+            val col = index % gridColumns
+            val x = startX + (col * gridSpacingX)
+            val y = startY - (row * gridSpacingY)
+
+            // Set button position
+            levelButtons[index]?.setPosition(x, y)
+
+            // Set button color based on selection
+            if (index == selectedLevel) {
+                levelButtons[index]?.color = Color.WHITE
+            } else {
+                levelButtons[index]?.color = Color.GRAY
+            }
+
+            stageLevelSelection.addActor(levelButtons[index])
+        }
+
+        // Handle arrow key navigation
+        if (Gdx.input.isKeyJustPressed(Input.Keys.UP)) {
+            if (selectedLevelY > 0) {
+                selectedLevelY--
+                updateSelectedLevel()
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.DOWN)) {
+            val maxRows = (levels.size - 1) / gridColumns
+            if (selectedLevelY < maxRows) {
+                selectedLevelY++
+                updateSelectedLevel()
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)) {
+            if (selectedLevelX > 0) {
+                selectedLevelX--
+                updateSelectedLevel()
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)) {
+            if (selectedLevelX < gridColumns - 1 && selectedLevel < levels.size - 1) {
+                selectedLevelX++
+                updateSelectedLevel()
             }
         }
 
-        levelButtons.forEach {
-            stageLevelSelection.addActor(it.value)
+        // Handle selection with Enter key
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            world.getSystem(GameStateSystem::class.java).changeGameState(State.LoadingLevel(selectedLevel))
         }
+
         stageLevelSelection.act()
         stageLevelSelection.draw()
+    }
 
+    private fun updateSelectedLevel() {
+        selectedLevel = selectedLevelY * gridColumns + selectedLevelX
+        // Ensure selectedLevel is within bounds
+        val levels = getKoin().get<LevelLibrary>().levels
+        if (selectedLevel >= levels.size) {
+            selectedLevel = levels.size - 1
+            selectedLevelX = selectedLevel % gridColumns
+            selectedLevelY = selectedLevel / gridColumns
+        }
     }
 
     private fun createToolButton(text: String, categoryId: Int): TextButton {

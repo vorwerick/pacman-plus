@@ -8,8 +8,10 @@ class LevelLibrary(val levels: MutableList<Level> = mutableListOf<Level>()) {
     }
 
     init {
-        levels.add(Level(8, 8, 32, 0, 0))
-        levels.add(Level(8, 8, 32, 0, 0))
+        // Add 20 empty levels
+        for (i in 0 until 20) {
+            levels.add(Level(8, 8, 32, 0, 0))
+        }
     }
 
 }

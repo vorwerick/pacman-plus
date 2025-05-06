@@ -37,8 +37,7 @@ class MenuScreen : KtxScreen {
     val stage = Stage(ScreenViewport())
 
     val menuItems = listOf<ShadowLabel>(
-        ShadowLabel("CAMPAIGN", titleColor = Color.GRAY),
-        ShadowLabel("DEBUG MODE", titleColor = Color.GRAY),
+        ShadowLabel("PLAY", titleColor = Color.GRAY),
         ShadowLabel("SETTINGS", titleColor = Color.GRAY),
         ShadowLabel("CREDITS", titleColor = Color.GRAY),
         ShadowLabel("QUIT", titleColor = Color.GRAY)
