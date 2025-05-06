@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch
 import com.badlogic.gdx.graphics.g2d.TextureRegion
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer
 import cz.pacmanplus.assets.AssetPaths
+import cz.pacmanplus.assets.LevelTheme
 import cz.pacmanplus.game.GameState
 import cz.pacmanplus.game.core.components.graphics.DrawableStateComponent
 import cz.pacmanplus.game.core.components.objects.FloorComponent
@@ -25,17 +26,17 @@ class BackgroundRenderingSystem(
 
     override fun processSystem() {
 
-        val texture = TextureRegion.split(AssetPaths.floor(gameState.map.levelTheme).findTexture(), 32, 32)[0][0]
+        val texture = TextureRegion.split(AssetPaths.floor(LevelTheme.Egypt).findTexture(), 32, 32)[0][0]
 
         spriteBatch.begin()
 
         val greyscale = 0.4f
         val alpha = 1f
         spriteBatch.setColor(greyscale, greyscale, greyscale, alpha)
-        for (x in 0 until gameState.map.tileWidth) {
-            for (y in 0 until gameState.map.tileHeight) {
+        for (x in 0 until 32) {
+            for (y in 0 until 32) {
 
-                spriteBatch.draw(texture, (32f * x) + 16, (32f * y) + 16)
+             //   spriteBatch.draw(texture, (32f * x) + 16, (32f * y) + 16)
             }
         }
         spriteBatch.color = Color.WHITE

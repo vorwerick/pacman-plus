@@ -14,6 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import com.kotcrab.vis.ui.VisUI
+import cz.pacmanplus.RootUI
+import cz.pacmanplus.showLoadingScreen
 import cz.pacmanplus.showMenuScreen
 import ktx.actors.centerPosition
 import ktx.app.KtxScreen
@@ -36,8 +38,8 @@ class IntroScreen : KtxScreen {
     var subCorpNameTargetPos = Vector2()
 
     var elapsedTime = 0f  // Čas, který uplynul
-    var sizeVal = 0.1f  // Počáteční hodnota
-    val duration = 1.6f  // Délka animace v sekundách
+    var sizeVal = 0.2f  // Počáteční hodnota
+    val duration = 2f  // Délka animace v sekundách
 
     val stage = Stage(ScreenViewport())
 
@@ -51,9 +53,10 @@ class IntroScreen : KtxScreen {
         skin = VisUI.getSkin()
         fps = Label("Intro screen", skin)
         corpName = Label("Poopin' Dogs", skin)
+
         subCorpName = Label("", skin)
         corpName.setFontScale(sizeVal)
-        subCorpName.setFontScale(1.5f)
+        subCorpName.setFontScale(1f)
 
         val button = TextButton("Click me", skin)
 
@@ -87,7 +90,7 @@ class IntroScreen : KtxScreen {
 
     override fun render(delta: Float) {
         if(Gdx.input.isKeyPressed(Input.Keys.ANY_KEY)) {
-            showMenuScreen()
+            showLoadingScreen()
         }
         elapsedTime += (delta)
 
@@ -98,7 +101,7 @@ class IntroScreen : KtxScreen {
         }
 
         // Interpolace pomocí bounceIn (hodnota se mění podle času)
-        sizeVal = Interpolation.bounceOut.apply(t) * 4f
+        sizeVal = Interpolation.bounceOut.apply(t) * 2.4f
 
 
         //sizeVal += delta

@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.utils.viewport.ScreenViewport
 import cz.pacmanplus.game.DefaultCameraConfiguration
 import cz.pacmanplus.game.GameState
+import cz.pacmanplus.game.LevelLibrary
 import cz.pacmanplus.game.PlayerCamera
 import cz.pacmanplus.game.core.entity.*
 import cz.pacmanplus.game.core.entity.creator.FloorObjectsCreator
@@ -31,6 +32,9 @@ val gameContext = module {
     single<Stage> {
         Stage(ScreenViewport())
     }
+    single<LevelLibrary> {
+        LevelLibrary()
+    }
     single<GameState> {
         GameState()
     }
@@ -46,13 +50,15 @@ val gameContext = module {
     single<FloorObjects> { FloorObjectsCreator() }
     single<WallObjects> { WallObjectsCreator() }
     single<ItemObjects> { ItemObjectsCreator() }
-    single<MapCreator> { MapCreator() }
+    single<EntityFactory> { EntityFactory() }
     single<CharacterCreator> { CharacterCreator() }
     single<World> {
 
         World(
             WorldConfigurationBuilder()
-              .with(PhysicsPlugin())
+                .with(GameStateSystem())
+                .with(LevelEditorSystem())
+                .with(PhysicsPlugin())
 
                 .with(PlayerInputSystem())
                 .with(TimerSystem())
@@ -67,13 +73,14 @@ val gameContext = module {
                 .with(ProjectileMovementSystem())
                 .with(PathMovementSystem())
 
-                .with(PhysicsCircleRenderingSystem(     get(),  get(),))
-                .with(PhysicsRectangleRenderingSystem(     get(),  get(),))
+                .with(PhysicsCircleRenderingSystem(get(), get()))
+                .with(PhysicsRectangleRenderingSystem(get(), get()))
 
 
                 .with(PhysicsGuiSystem())
                 .with(EntityGuiSystem())
                 .with(RenderingPlugin())
+
 
 
                 .build()

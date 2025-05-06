@@ -18,7 +18,18 @@ class Layer(val name: String, width: Int, height: Int) {
 
     companion object {
         fun serialize(source: String): Layer {
-            return Layer("", 0, 0)
+            val rows = source.split("\n")
+            val width = rows.size
+            val height = if (width > 0) rows[0].split(",").size else 0
+            val layer = Layer("Deserialized", width, height)
+
+            rows.forEachIndexed { x, row ->
+                val cells = row.split(",")
+                cells.forEachIndexed { y, cell ->
+                    layer.grid[x][y] = if (cell == "null") null else cell as Object
+                }
+            }
+            return layer
         }
 
     }

@@ -7,7 +7,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 import org.slf4j.LoggerFactory
 import kotlin.random.Random
 
-class MapCreator {
+class EntityFactory {
 
     val log = LoggerFactory.getLogger("LevelCreator")
 

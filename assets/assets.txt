@@ -27,10 +27,15 @@ temp/turret.png
 temp/wall.png
 temp/xray.png
 ui/Frame.png
+ui/discord.png
+ui/egypt.png
 ui/font-list.fnt
 ui/font-subtitle.fnt
 ui/font-window.fnt
 ui/font.fnt
+ui/loading-banner.png
+ui/public-pixel.ttf
+ui/rustybanner.png
 ui/uiskin.atlas
 ui/uiskin.json
 ui/uiskin.png

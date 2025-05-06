@@ -558,15 +558,7 @@ class EditorScreen : KtxScreen {
     }
 
     private fun handlePauseUnpauseInput() {
-        val gameState = getKoin().get<GameState>()
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            if (gameState.state is State.Running) {
-                gameState.state = State.Paused
-            } else if (gameState.state is State.Paused) {
-                gameState.state = State.Running
-            }
-            log.info("Game state changed to ${gameState.state}")
-        }
+
     }
 
     private fun worldUpdate() {

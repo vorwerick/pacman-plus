@@ -11,7 +11,7 @@ import cz.pacmanplus.utils.IterableGrid
 
 class WallGridSystem(private val gameState: GameState) : BaseSystem() {
 
-    val wallGrid = IterableGrid(gameState.map.tileWidth, gameState.map.tileHeight)
+    val wallGrid = IterableGrid(32, 32)
 
     fun sync() {
 

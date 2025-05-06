@@ -47,11 +47,11 @@ class EntityGuiSystem() : BaseSystem() {
         }
 
         val entities = world.aspectSubscriptionManager.get(Aspect.all())
-        entityInfo.setText("FRAME_TIME: ${(frameTime*1000).toInt()}ms | ENTITY_COUNT: ${entities.entities.size()}/${entities.entities.capacity}")
+    //    entityInfo.setText("FRAME_TIME: ${(frameTime*1000).toInt()}ms | ENTITY_COUNT: ${entities.entities.size()}/${entities.entities.capacity}")
 
         val walls = world.aspectSubscriptionManager.get(Aspect.all(RectangleCollisionComponent::class.java))
         val pickups = world.findPickupItems()
-        entitiesState.setText("WALLS_&_BOXES: ${walls.entities.size()} | COLLECTABLES: ${pickups.size()}")
+   //     entitiesState.setText("WALLS_&_BOXES: ${walls.entities.size()} | COLLECTABLES: ${pickups.size()}")
 
         val player = world.findPlayer()
         player?.let { p ->

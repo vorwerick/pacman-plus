@@ -1,6 +1,8 @@
 package cz.pacmanplus
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.g2d.BitmapFont
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator
 import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Label
 import com.badlogic.gdx.scenes.scene2d.ui.Skin
@@ -30,24 +32,31 @@ class RootUI : KtxGame<KtxScreen>() {
     lateinit var fps: Label
     val stage = Stage(ScreenViewport())
 
-
+    companion object {
+        lateinit var font: BitmapFont
+    }
 
     override fun create() {
         VisUI.load()
         KtxAsync.initiate()
+        val generator = FreeTypeFontGenerator(Gdx.files.internal("ui/public-pixel.ttf"));
+        val parameter = FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 24;
+        font = generator.generateFont(parameter);
 
 
-        //setScreen<IntroScreen>()
-        addScreen(LoadingScreen())
-        setScreen<LoadingScreen>()
         log.debug("Created and ready")
 
         skin = VisUI.getSkin()
         fps = Label("", skin)
+        fps.style.font = RootUI.font
+
         fps.y += 12
         stage.addActor(fps)
         stage.act()
         stage.draw() //precalculate
+
+        showIntroScreen()
     }
 
     override fun resume() {
@@ -65,7 +74,7 @@ class RootUI : KtxGame<KtxScreen>() {
 
     override fun render() {
         super.render()
-        fps.setText(GFXService().getStatusInfo())
+      //  fps.setText(GFXService().getStatusInfo())
         stage.act(Gdx.graphics.deltaTime)
         stage.draw()
     }
@@ -88,11 +97,20 @@ inline fun <reified T : KtxScreen> T.showMenuScreen() {
     getKoin().get<RootUI>().setScreen(MenuScreen::class.java)
 }
 
-inline fun <reified T : KtxScreen> T.showIntroScreen() {
+fun KtxGame<KtxScreen>.showIntroScreen() {
+    getKoin().get<RootUI>().disposeCurrentScreen()
+    getKoin().get<RootUI>().addScreen(getKoin().get<IntroScreen>())
     getKoin().get<RootUI>().setScreen(IntroScreen::class.java)
 }
 
+inline fun <reified T : KtxScreen> T.showLoadingScreen() {
+    getKoin().get<RootUI>().disposeCurrentScreen()
+    getKoin().get<RootUI>().addScreen(getKoin().get<LoadingScreen>())
+    getKoin().get<RootUI>().setScreen(LoadingScreen::class.java)
+}
+
 inline fun <reified T : KtxScreen> T.showGameScreen() {
+    getKoin().get<RootUI>().disposeCurrentScreen()
     getKoin().get<RootUI>().addScreen(getKoin().get<GameScreen>())
     getKoin().get<RootUI>().setScreen(GameScreen::class.java)
 }
