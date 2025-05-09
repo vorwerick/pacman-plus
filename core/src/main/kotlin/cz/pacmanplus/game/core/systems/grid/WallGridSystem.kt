@@ -26,8 +26,8 @@ class WallGridSystem(private val gameState: GameState) : BaseSystem() {
                 val e = world.getEntity(id)
                 e.getComponent(WallComponent::class.java)?.let { wall ->
                     e.getComponent(PositionComponent::class.java)?.let { position ->
-                        val entityX = ((position.x + 16) / 32).toInt()
-                        val entityY = ((position.y + 16) / 32).toInt()
+                        val entityX = ((position.x) / 32).toInt()
+                        val entityY = ((position.y ) / 32).toInt()
                         if (entityX == x && entityY == y) {
                             wallGrid.add(x, y, value = id)
                         }

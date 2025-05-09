@@ -35,6 +35,7 @@ import cz.pacmanplus.game.core.entity.ItemObjects
 import cz.pacmanplus.game.core.entity.WallObjects
 import cz.pacmanplus.game.core.systems.rendering.PhysicsCircleRenderingSystem
 import cz.pacmanplus.game.core.systems.rendering.PhysicsRectangleRenderingSystem
+import cz.pacmanplus.game.core.systems.LevelEditorSystem
 import ktx.app.KtxScreen
 import org.koin.core.context.unloadKoinModules
 import org.koin.java.KoinJavaComponent.getKoin
@@ -88,6 +89,7 @@ class EditorScreen : KtxScreen {
     private val batch = SpriteBatch()
     private val font = BitmapFont()
     private val editor: Editor = getKoin().get()
+    private val levelEditorSystem: LevelEditorSystem = getKoin().get()
 
     // UI panels
     private lateinit var toolPanel: Table
@@ -588,8 +590,9 @@ class EditorScreen : KtxScreen {
         // Set up input processor to handle both UI and game input
         val inputMultiplexer = InputMultiplexer()
         inputMultiplexer.addProcessor(stage)  // UI input takes priority
-        inputMultiplexer.addProcessor(createGameInputProcessor())  // Game input as fallback
-        Gdx.input.inputProcessor = inputMultiplexer
+
+        // Initialize the LevelEditorSystem (it will add its own input processor)
+        //levelEditorSystem.initialize()
 
         log.debug("Editor.kt Screen shown")
     }

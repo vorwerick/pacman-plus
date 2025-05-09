@@ -13,7 +13,7 @@ import org.koin.java.KoinJavaComponent.getKoin
 class GameStateSystem : BaseSystem() {
 
     fun changeGameState(state: State) {
-        cz.pacmanplus.game.changeGameState(newState = state)
+        changeGameState(newState = state)
     }
 
     override fun processSystem() {
@@ -43,9 +43,11 @@ class GameStateSystem : BaseSystem() {
 
     private fun processLoadingLevelState(levelId: Int) {
         val library = getKoin().get<LevelLibrary>()
-        EntityFactory().createLevelDebug(32, 32)
 
-        changeGameState(State.Ready(levelId))
+        EntityFactory().fromLevel( library.get(levelId))
+       // EntityFactory().createLevelDebug(32, 32)
+
+        changeGameState(State.EditLevel(levelId))
     }
 
     private fun processInGameState() {

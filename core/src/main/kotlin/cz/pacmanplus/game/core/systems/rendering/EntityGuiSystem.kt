@@ -56,7 +56,7 @@ class EntityGuiSystem() : BaseSystem() {
         val player = world.findPlayer()
         player?.let { p ->
             p.getComponent(InventoryComponent::class.java)?.let { inventory ->
-                entitiesState.setText("SCORE: ${inventory.score} | SLOT: ${inventory.slot} | KEYS: ${inventory.keyring.joinToString(" ")}")
+            //    entitiesState.setText("SCORE: ${inventory.score} | SLOT: ${inventory.slot} | KEYS: ${inventory.keyring.joinToString(" ")}")
 
             }
         }

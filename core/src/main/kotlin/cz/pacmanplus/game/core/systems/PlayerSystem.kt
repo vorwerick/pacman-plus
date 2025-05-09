@@ -26,12 +26,15 @@ class PlayerSystem : BaseSystem() {
 
         playerId?.let {
             val player = world.getEntity(it)
-            val position = player.getComponent(PositionComponent::class.java)
-            val inputComponent = player.getComponent(InputComponent::class.java)
-            val cam = getKoin().get<PlayerCamera>()
+            player?.let { p ->
+                val position = p.getComponent(PositionComponent::class.java)
+                val inputComponent = p.getComponent(InputComponent::class.java)
+                val cam = getKoin().get<PlayerCamera>()
 
-            cam.camera.position.set(Vector3(position.x, position.y, 0f))
-            cam.camera.update()
+                cam.camera.position.set(Vector3(position.x, position.y, 0f))
+                cam.camera.update()
+            }
+
         }
 
     }

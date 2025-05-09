@@ -71,6 +71,7 @@ class GameStateRenderer(val spriteBatch: SpriteBatch, val shapeRenderer: ShapeRe
             is State.Ready -> processReadyGui((state.state as State.Ready).levelId)
             State.SelectLevel -> processSelectLevelGui()
             is State.LoadingLevel -> processLoadingLevelGui((state.state as State.LoadingLevel).levelId)
+            is State.EditLevel -> processEditLevel((state.state as State.EditLevel).levelId)
             else -> {}
         }
         val cam: PlayerCamera = getKoin().get<PlayerCamera>()
@@ -105,6 +106,10 @@ class GameStateRenderer(val spriteBatch: SpriteBatch, val shapeRenderer: ShapeRe
         spriteBatch.end()
 
 
+
+    }
+
+    private fun processEditLevel(levelId: Int) {
 
     }
 

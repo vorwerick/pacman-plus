@@ -80,6 +80,7 @@ val gameContext = module {
                 .with(PhysicsGuiSystem())
                 .with(EntityGuiSystem())
                 .with(RenderingPlugin())
+                .with(LevelEditorRenderer(get(), get()))
 
 
 
